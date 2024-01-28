@@ -1,0 +1,12 @@
+f fib() =>
+  a,b = 0,1
+  r f =>
+    a,b = b, a+b
+    r b
+
+fibfunc = fib()
+log(fibfunc()) # 1
+log(fibfunc()) # 1
+log(fibfunc()) # 2
+log(fibfunc()) # 3
+log(fibfunc()) # 5
