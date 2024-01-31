@@ -1,7 +1,7 @@
 {
-  "name": "cmsi3802",
+  "name": "pythscrip",
   "version": "1.0.0",
-  "description": "Compiler for cmsi3802",
+  "description": "Compiler for Pythscrip",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/loosh/cmsi3802.git"
+    "url": "git+https://github.com/loosh/pythscrip.git"
   },
   "author": "loosh, nortiz10",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/loosh/cmsi3802/issues"
+    "url": "https://github.com/loosh/pythscrip/issues"
   },
-  "homepage": "https://github.com/loosh/cmsi3802#readme",
+  "homepage": "https://github.com/loosh/pythscrip#readme",
   "devDependencies": {
     "c8": "^9.1.0",
     "mocha": "^10.2.0"
