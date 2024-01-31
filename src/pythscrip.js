@@ -1,7 +1,36 @@
-console.log('The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start.');
+#! /usr/bin/env node
 
-function compile() {
-  return "eventually this will be compiled";
+import * as fs from "node:fs/promises";
+import process from "process";
+import compile from "./compiler.js";
+import { Program } from "./core.js";
+import stringify from "graph-stringify";
+
+const help = `Carlos compiler
+
+Syntax: carlos <filename> <outputType>
+
+Prints to stdout according to <outputType>, which must be one of:
+
+  parsed     a message that the program was matched ok by the grammar
+  analyzed   the statically analyzed representation
+  optimized  the optimized semantically analyzed representation
+  js         the translation to JavaScript
+`;
+
+async function compileFromFile(filename, outputType) {
+  try {
+    const buffer = await fs.readFile(filename);
+    const compiled = compile(buffer.toString(), outputType);
+    console.log(compiled instanceof Program ? stringify(compiled) : compiled);
+  } catch (e) {
+    console.error(`\u001b[31m${e}\u001b[39m`);
+    process.exitCode = 1;
+  }
 }
 
-export { compile };
+if (process.argv.length !== 4) {
+  console.log(help);
+} else {
+  compileFromFile(process.argv[2], process.argv[3]);
+}
