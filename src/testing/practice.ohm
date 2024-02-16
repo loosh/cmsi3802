@@ -1,0 +1,120 @@
+Practice {
+  Program = Decl+
+
+  Decl = VarDecl | FunDecl | TypeDecl
+
+  VarDecl = Type id "=" Exp ";" --with_init
+        | Type id ";" --no_init
+
+  TypeDecl = StructDecl | EnumDecl
+  StructDecl = struct id "{" VarDecl* "}" ";"
+
+  FuncDecl = Type id "(" Params ")" Block
+  EnumDecl = enum id "{" NonemptyListof<id, ","> "}" ";"
+  Params = NonemptyListof<Param, ",">
+  Param = Type id
+  Block = "{" Stmt* "}"
+
+  Type = Type "[" "]" -- array
+        | id        -- id
+        | void      -- void
+
+  Stmt = Assignment
+        | CallStmt
+        | IfStmt
+        | WhileStmt
+        | ReturnStmt
+        | ForStmt
+        | SwitchStmt
+        | BreakStmt
+        | ContinueStmt
+        | TryStmt
+        | ThrowStmt
+        | Block
+
+  Assignment = id "=" Exp ";"
+  BreakStmt = break ";"
+  ContinueStmt = continue ";"
+  ReturnStmt = return Exp ";"
+  CallStmt = Call ";"
+
+  WhileStmt = while Exp Block
+  IfStmt = if Exp Block else Block  --with_else
+        | if Exp Block else IfStmt --nested_if
+        | if Exp Block             --plain_if
+            
+  TryStmt = try Block Catch*  Finally?
+  Catch = catch "(" Type_id id ")" Block
+  Finally = "finally" Block
+  Call = id "(" Args ")"
+
+  Exp = Exp ("||" Exp1)*
+        | Exp ("&&" Exp1)*
+        | Exp1
+  Exp1 = Exp1 "&&" Exp2
+        | Exp2
+  Exp2 = Exp3 relop Exp3
+        | Exp3
+  Exp3 = Exp3 ("+" | "-") Term
+        | Term
+  Term = Term ("*" | "/" | "%") Factor
+        | Factor
+  Factor = Primary "**" Factor --power
+        | Primary
+  Primary = "(" Exp ")"        --parens
+        | id
+        | num
+        | Call
+        | "-" Primary
+
+  relop = "<=" | "<" | ">" | ">=" | "==" | "!="
+
+  struct = "struct" ~idchar
+  enum = "enum" ~idchar
+  while = "while" ~idchar
+  if = "if" ~idchar
+  else = "else" ~idchar
+  switch = "switch" ~idchar
+  case = "case" ~idchar
+  default = "default" ~idchar
+  break = "break" ~idchar
+  continue = "continue" ~idchar
+  return = "return" ~idchar
+  try = "try" ~idchar
+  catch = "catch" ~idchar
+  throw = "throw" ~idchar
+  sizeof = "sizeof" ~idchar
+
+  keyword = struct | enum | int8 | int16 | int32 | int64 | int128 | uint | uin16 | uint32 | uin64 | uint128 | void | if | else | while | return | sizeof | typedef | extern | static | const | break | continue |  switch | case | default | try | catch | throw
+
+  id = ~keyword letter idchar+
+  idchar = alnum | "_"
+  num = digit+ ("." digit+)? (("e" | "E") ("+" | "-")? digit+)?
+
+ // All strings of Unicode letters, except python, pycharm, or pyc.
+ NoPython = ~"python" ~"pycharm" ~"pyc" letter+
+  letter = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+  digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+  alnum = letter | digit
+  int8 = "int8" ~idchar
+  int16 = "int16" ~idchar
+  int32 = "int32" ~idchar
+  int64 = "int64" ~idchar
+  int128 = "int128" ~idchar
+  uint8 = "uint8" ~idchar
+  uint16 = "uint16" ~idchar
+  uint32 = "uint32" ~idchar
+  uint64 = "uint64" ~idchar
+  uint128 = "uint128" ~idchar
+  void = "void" ~idchar
+  typedef = "typedef" ~idchar
+  extern = "extern" ~idchar
+  static = "static" ~idchar
+  const = "const" ~idchar
+  break = "break" ~idchar
+  continue = "continue" ~idchar
+  switch = "switch" ~idchar
+  case = "case" ~idchar
+  default = "default" ~idchar
+  try = "
+}

@@ -2,7 +2,7 @@
 
 import * as fs from "node:fs/promises";
 import process from "process";
-import compile from "./compiler.js";
+import compile from "./analyzer.js";
 import { Program } from "./core.js";
 import stringify from "graph-stringify";
 
