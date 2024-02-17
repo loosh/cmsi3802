@@ -135,10 +135,10 @@ for (let i = 0; i < s.length(); i++) {
 ##### Pythscrip
 ```
 i in 1,10:
-  log(*i 10)
+  log(*i 10);
 
 s = 'hello'
-i in 0,#s: log(s[i])
+i in 0,#s: log(s[i]);
 ```
 
 #### While Loop

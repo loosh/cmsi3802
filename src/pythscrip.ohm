@@ -43,7 +43,7 @@ Pythscrip {
        | Exp7
   Exp7 = ("*" | "/") Exp7 Exp7          --multiplicative
        | Exp8                     
-  Exp8 = ("+" | "-") Exp8 Exp8          --additive
+  Exp8 = ("+" | "-") Exp7 Exp7          --additive
        | Exp9                     
   Exp9 = "%" Exp9 Exp10                 --modulus
        | Exp10
