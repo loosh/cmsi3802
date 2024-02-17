@@ -31,6 +31,22 @@ log('hello world')
 
 ---
 
+### Negative Numbers
+
+#### Javascript
+
+```
+a = -5
+```
+
+#### Pythscrip
+
+```
+b = _5 // same as pyth
+```
+
+---
+
 ### Functions
 
 #### Javascript

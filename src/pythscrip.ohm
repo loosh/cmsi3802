@@ -125,4 +125,5 @@ Pythscrip {
   validchar = "\\'" | "\\n" | "\\\\" | any
 
   DictItem = id ":" Exp
+  space      += "//" (~"\n" any)* --comment
 }
