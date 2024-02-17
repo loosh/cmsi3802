@@ -27,7 +27,8 @@ const goodPrograms = [
   'b+=1',
   'a = _5',
   'log(*a +1 *b 0.01)',
-  `['banana', 'apple', 'orange']`
+  `['banana', 'apple', 'orange']`,
+  `i in 1, 10: ?%i 2: log(i); !: br;;`,
 ];
 
 const badPrograms = [
@@ -42,6 +43,9 @@ const badPrograms = [
   `if (true) {
     console.log('hi')
   }`,
+  `?5>2: br;`,
+  `br`,
+  `ct`
 ];
 
 describe('Parser', () => {
