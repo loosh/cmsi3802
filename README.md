@@ -7,12 +7,13 @@ PythScrip is a "mini"-golfing language that incoorperates syntax and features fr
 
 - Dynamic types
 - Concise syntax
+  - 'Single quotes for strings only'
 - Repeat blocks
 - Closure support
 - Efficient for/while loops
 - Shortcuts for tedious tasks
 
-## Examples
+## Functionality
 
 ### Printing
 
@@ -46,51 +47,105 @@ f addFive(x) => r +x 5
 
 ---
 
-### If Statements
+### Logic Statements
 
-#### Javascript
+#### If Statements
+##### Javascript
 
 ```
 x = 5
 if (x < 5) {
-  console.log('x is less than 5')
+  console.log("x is less than 5");
 } else if (x > 5) {
-  console.log('x is greater than 5)
+  console.log("x is greater than 5");
 } else {
-  console.log('x is equal to 5)
+  console.log("x is equal to 5");
 }
 ```
 
+##### Pythscrip
+
+```
+x = 5
+?x < 5: log('x is less than 5');
+!? x > 5: log('x is greater than 5');
+!: log('x is equal to 5');
+```
+
+#### Ternary Statements
+
+##### Javascript
+```
+height > 6 ? true : false 
+```
+##### Pythscrip
+```
+true ? height > 6 ! false
+```
+---
+### Try Catch/Except
+
+#### Javascript
+```
+try{
+  if(height < 6) throw "Too Short"
+}
+catch(error) {
+  console.log(error)
+}
+```
 #### Pythscrip
-
 ```
-?x < 5:
-  log('x is less than 5')
-!? x > 5:
-  log('x is greater than 5')
-!:
-  log('x is equal to 5')
+t: ?height < 6: th 'Too Short';;
+e(error): log(error);
 ```
-
 ---
 
 ### Loops
-
-#### Javascript
+#### For Loop
+##### Javascript
 
 ```
 for (let i = 0; i < 10; i++) {
   console.log(i * 10)
 }
+
+var s = "hello"
+for (let i = 0; i < s.length(); i++) {
+  console.log(s[i])
+}
 ```
 
-#### Pythscrip
-
+##### Pythscrip
 ```
-i in 1,10 =>
+i in 1,10:
+  log(*i 10)
+
+s = 'hello'
+i in 0,#s: log(s[i])
+```
+
+#### While Loop
+##### Javascript
+```
+var i = -10
+while (i <= 10) {
+  if (i == 5) continue
+  if (i == 3) break
+  console.log(i)
+  i += 1
+}
+```
+##### Pythscrip
+```
+i = _10
+w i<=10:
+  ?i==5: ct;
+  ?i==3: br;
   log(i)
+  i += 1
+;
 ```
-
 ---
 
 ### Quick Repeat
@@ -104,13 +159,12 @@ i in 1,10 =>
 #### Pythscrip
 
 ```
-*.5 {
-  log('this will log 5 times')
-}
+*.5: 
+  log('this will log 5 times');
 ```
 
 ---
-
+## Examples
 ### Getting Length of Array or String
 
 #### Javascript
@@ -118,13 +172,15 @@ i in 1,10 =>
 ```
 a = ["banana", "cherry", "apple"]
 console.log(a.length)
+console.log(a[0])
 ```
 
 #### Pythscrip
 
 ```
-a = ["banana", "cherry", "apple"]
-log(#a)
+a = ['banana', 'cherry', 'apple']
+log(#a)   //prints 3
+log(a[0]) //prints banana
 ```
 
 ---
@@ -138,23 +194,22 @@ const gcd = (a,b) => {
   if (a ==b) {
     return a;
   } else if (a > b) {
-    return gcd(a-b, b)
+    return gcd(a-b, b);
   } else {
-    return gcd(a,b)
+    return gcd(a,b);
   }
 }
 ```
 
 #### Pythscrip
-
 ```
 f gcd(a,b) =>
-  ?a==b:
-    r a
-  !?a>b:
-    r gcd(a-b,b)
-  !
-    r gcd(a,b)
+  ?a==b: r a;
+  !?a>b: r gcd(-a b,b);
+  !: r gcd(a,b);
+  ;
 ```
-
----
+Or, if you would like it in one line
+```
+fgcd(a,b)=>?a==b:ra;!?a>b:rgcd(-a b,b);!:rgcd(a,b);;
+```
