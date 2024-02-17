@@ -14,7 +14,7 @@ Pythscrip {
        | ExceptStmt
        | ReturnStmt
   
-  VarDecl = id "=" Exp		--assignment
+  VarDecl = id "=" Exp                  --assignment
       
   FuncDecl = "f" id "(" Params ")" "=>" Body ";"
   Params = ListOf<Exp, ","> 
@@ -22,24 +22,24 @@ Pythscrip {
 
   Exp = Exp1 "?" Exp1 "!" Exp           --ternary
       | Exp1
-  Exp1 = Exp1 ("|" Exp2)*				        --or
-       | Exp2("&" Exp2)*			          --and
+  Exp1 = Exp1 ("|" Exp2)*               --or
+       | Exp2("&" Exp2)*                --and
        | Exp2
-  Exp2 = Exp2 relop Exp3			          --relop
+  Exp2 = Exp2 relop Exp3                --relop
        | Exp3
-  Exp3 = Exp3 "++"					            --increment
-       | Exp3 "--"					            --decrement
+  Exp3 = Exp3 "++"                      --increment
+       | Exp3 "--"                      --decrement
        | Exp4
   Exp4 = Exp4 "F"                       --factorial
        | Exp5
   Exp5 = "~" Exp5                       --negation
        | Exp6
   Exp6 = Exp6 "+=" Exp6                 --add_assign
-       | Exp6 "-=" Exp6				          --subtract_assign
-       | Exp6 "*=" Exp6				          --multiply_assign
-       | Exp6 "/=" Exp6				          --divide_assign
+       | Exp6 "-=" Exp6                 --subtract_assign
+       | Exp6 "*=" Exp6                 --multiply_assign
+       | Exp6 "/=" Exp6                 --divide_assign
        | Exp6 "%=" Exp6                 --mod_assign
-       | Exp6 "^=" Exp6				          --exponent_assign
+       | Exp6 "^=" Exp6                 --exponent_assign
        | Exp7
   Exp7 = ("*" | "/") Exp7 Exp7          --multiplicative
        | Exp8                     
@@ -66,13 +66,13 @@ Pythscrip {
   FuncCall = id "(" Params ")"
   PrintStmt = log "(" Exp ")"
 
-  IfStmt = "?" Exp Block "!" Block     --with_else
-         | "?" Exp Block "!" IfStmt    --nested_if
-         | "?" Exp Block               --plain_if
+  IfStmt = "?" Exp Block "!" Block      --with_else
+         | "?" Exp Block "!" IfStmt     --nested_if
+         | "?" Exp Block                --plain_if
   
   LoopIfStmt = "?" Exp LoopBlock "!" LoopBlock   --with_else
              | "?" Exp LoopBlock "!" IfStmt      --nested_if
-             | "?" Exp LoopBlock   				       --plain_if
+             | "?" Exp LoopBlock                 --plain_if
   
   WhileStmt = "w" Exp LoopBlock
   ForStmt = id in ForLoopExpression LoopBlock
@@ -81,7 +81,7 @@ Pythscrip {
   LoopTryStmt = try LoopBlock
   ExceptStmt = except "(" Params ")" Block
   LoopExceptStmt = except "(" Params ")" LoopBlock  --with_args
-                 | except LoopBlock					        --no_args
+                 | except LoopBlock                 --no_args
            
   ReturnStmt = return Exp
   BreakStmt = break
@@ -128,5 +128,5 @@ Pythscrip {
   validchar = "\\'" | "\\n" | "\\\\" | any
 
   DictItem = id ":" Exp
-  space      += "//" (~"\n" any)* --comment
+  space    += "//" (~"\n" any)* --comment
 }
