@@ -1,43 +1,128 @@
-AstroPlusPlus {
-  Program	    = Stmt+
-  Stmt 	      = Assignment
-    		      | Print
-              | IfStmt
-              | WhileStmt
-              | BreakStmt
-              
-  Assignment  = id "=" Exp ";"
-  Print	      = print Exp ";"
-  IfStmt      = if Exp Block ElsePart?
-  ElsePart    = else (IfStmt | Block)
+Pythscrip {
+  Program = Stmt+
+  Stmt = | FuncDecl
+       | PrintStmt
+       | IfStmt
+       | WhileStmt
+       | ForStmt
+       | FuncCall
+       | VarDecl
+       | Exp
+       | RepeatStmt
+       | ThrowStmt
+       | TryStmt
+       | ExceptStmt
+       | ReturnStmt
+       
+  VarDecl = id "=" Exp		--assignment
+  		
+  FuncDecl = "f" id "(" Params ")" "=>" Body ";"
+  Params = ListOf<Exp, ","> 
+  Body = Exp* Stmt*
+
+  Exp = Exp1 "?" Exp1 "!" Exp     --ternary
+      | Exp1
+  Exp1 = Exp1 ("|" Exp2)*				          --or
+       | Exp2("&" Exp2)*			          --and
+       | Exp2
+  Exp2 = Exp2 relop Exp3			          --relop
+       | Exp3
+  Exp3 = Exp3 "++"					            --increment
+       | Exp3 "--"					            --decrement
+       | Exp4
+  Exp4 = Exp4 "F"                       --factorial
+       | Exp5
+  Exp5 = "~" Exp5                       --negation
+       | Exp6
+  Exp6 = Exp6 "+=" Exp6                 --add_assign
+       | Exp6 "-=" Exp6				          --subtract_assign
+       | Exp6 "*=" Exp6				          --multiply_assign
+       | Exp6 "/=" Exp6				          --divide_assign
+       | Exp6 "%=" Exp6                 --mod_assign
+       | Exp6 "^=" Exp6				          --exponent_assign
+       | Exp7
+  Exp7 = ("*" | "/") Exp7 Exp7          --multiplicative
+       | Exp8                     
+  Exp8 = ("+" | "-") Exp8 Exp8          --additive
+       | Exp9                     
+  Exp9 = "%" Exp9 Exp10                 --modulus
+       | Exp10
+  Exp10 = "^" Exp10 Exp11               --exponential
+        | Exp11
+  Exp11 = numlit
+        | stringlit
+        | FuncCall
+        | "[" ListOf<Exp, ","> "]"      --array
+        | "{" ListOf<DictItem, ","> "}" --dict
+        | "#" id                        --length       
+        | id "[" (digit+ | id) "]"      --array_index       
+        | id "." id                     --get_object_dot
+        | id "[" Exp "]"                --get_object_bracket        
+        | "_" Exp                       --negative
+        | id
+
+  relop = "<=" | ">=" | "==" | "!=" | "<" | ">"
+
+  FuncCall = id "(" Params ")"
+  PrintStmt = log "(" Exp ")"
+
+  IfStmt = "?" Exp Block "!" Block     --with_else
+         | "?" Exp Block "!" IfStmt    --nested_if
+         | "?" Exp Block               --plain_if
   
-  WhileStmt   = while Exp Block
-  Block       = "{" Stmt+ "}"
-  BreakStmt   = break ";"
+  LoopIfStmt = "?" Exp LoopBlock "!" LoopBlock   --with_else
+             | "?" Exp LoopBlock "!" IfStmt      --nested_if
+             | "?" Exp LoopBlock   				       --plain_if
   
-  Exp		      = Exp1 relop Exp1						             --comparison
-  			      | Exp1
-  	
-  Exp1        = Exp ("+" | "-") Term                   --binary
-              | Term
-  Term        = Term ("*" | "/" | "%") Factor          --binary
-              | Factor
-  Factor      = Primary "**" Factor                    --binary
-              | "-" Primary                            --negation
-              | Primary
-  Primary     = id "(" ListOf<Exp, ","> ")"            --call
-              | numeral                                --num
-              | id                                     --id
-              | "(" Exp ")"   						             --parens
+  WhileStmt = "w" Exp LoopBlock
+  ForStmt = id in ForLoopExpression LoopBlock
+  RepeatStmt = "*" "." digit+ Block
+  TryStmt = try Block
+  LoopTryStmt = try LoopBlock
+  ExceptStmt = except "(" Params ")" Block
+  LoopExceptStmt = except "(" Params ")" LoopBlock  --with_args
+  				       | except LoopBlock					        --no_args
+  				 
+  ReturnStmt = return Exp
+  BreakStmt = break
+  ContinueStmt = continue
+  ThrowStmt = throw Exp
   
-  relop       = "<=" | "<" | "==" | "!=" | ">=" | ">"
-  numeral     = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
-  print       = "print" ~idchar
-  break       = "break" ~idchar
-  if          = "if" ~idchar
-  else 		    = "else" ~idchar
-  while		    = "while" ~idchar
-  idchar      = letter | digit | "_"
-  id          = ~print letter idchar*
-  space       += "//" (~"\n" any)*  --comment 
+  LoopBlock = ":" LoopStmts* ";"
+  LoopStmts = Exp 
+  			    | PrintStmt 
+            | LoopIfStmt 
+            | LoopTryStmt 
+            | LoopExceptStmt 
+            | BreakStmt 
+            | ContinueStmt
+  
+  ForLoopExpression = RangeExpression+ "," RangeExpression+ ("," digit+)? --range
+  					| Exp
+  RangeExpression = digit | id | "#" id --var_length
+  
+  Block = ":" Body ";"
+
+  log = "log" ~idchar
+  function = "f" ~idchar
+  in = "in" ~idchar
+  while = "w" ~idchar
+  try = "t" ~idchar
+  except = "e" ~idchar
+  break = "br" ~idchar
+  continue = "ct" ~idchar
+  throw = "th" ~idchar
+  return = "r" ~idchar
+
+  id = ~keyword letter idchar*
+  idchar = alnum | "_"
+
+  keyword = log | function | in | while | throw |  try | except | break | continue | return
+
+  numlit = digit+ ("." digit+)? (("e" | "E") ("+" | "-")? digit+)?
+  
+  stringlit = "'" (~"'" validchar)* "'"
+  validchar = "\\'" | "\\n" | "\\\\" | any
+
+  DictItem = id ":" Exp
 }
