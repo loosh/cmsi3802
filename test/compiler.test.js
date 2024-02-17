@@ -1,12 +1,36 @@
-import * as assert from 'assert';
-import { compile } from '../src/pythscrip.js';
+import assert from "node:assert/strict"
+import compile from "../src/compiler.js"
+// import { Program } from "../src/core.js"
 
-describe('Compiler', () => {
-  it('should pass', () => {
-    assert.equal(compile(), 'eventually this will be compiled');
-  });
+const sampleProgram = "log(0)"
 
-  it('should be true that true === true', () => {
-    assert.equal(true, true);
-  });
-});
+describe("Compiler", () => {
+  it("throws when the output type is missing", done => {
+    assert.throws(() => compile(sampleProgram), /Unknown output type/)
+    done()
+  })
+  it("throws when the output type is unknown", done => {
+    assert.throws(() => compile(sampleProgram, "no such type"), /Unknown output type/)
+    done()
+  })
+  it("accepts the parsed option", done => {
+    const compiled = compile(sampleProgram, "parsed")
+    assert(compiled.startsWith("Syntax is ok"))
+    done()
+  })
+  // it("accepts the analyzed option", done => {
+  //   const compiled = compile(sampleProgram, "analyzed")
+  //   // assert(compiled instanceof Program)
+  //   done()
+  // })
+  // it("accepts the optimized option", done => {
+  //   const compiled = compile(sampleProgram, "optimized")
+  //   // assert(compiled instanceof Program)
+  //   done()
+  // })
+  // it("generates js code when given the js option", done => {
+  //   const compiled = compile(sampleProgram, "js")
+  //   assert(compiled.startsWith("console.log(0)"))
+  //   done()
+  // })
+})
