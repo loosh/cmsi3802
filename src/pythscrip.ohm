@@ -13,16 +13,16 @@ Pythscrip {
        | TryStmt
        | ExceptStmt
        | ReturnStmt
-       
+  
   VarDecl = id "=" Exp		--assignment
-  		
+      
   FuncDecl = "f" id "(" Params ")" "=>" Body ";"
   Params = ListOf<Exp, ","> 
   Body = Exp* Stmt*
 
-  Exp = Exp1 "?" Exp1 "!" Exp     --ternary
+  Exp = Exp1 "?" Exp1 "!" Exp           --ternary
       | Exp1
-  Exp1 = Exp1 ("|" Exp2)*				          --or
+  Exp1 = Exp1 ("|" Exp2)*				        --or
        | Exp2("&" Exp2)*			          --and
        | Exp2
   Exp2 = Exp2 relop Exp3			          --relop
@@ -81,8 +81,8 @@ Pythscrip {
   LoopTryStmt = try LoopBlock
   ExceptStmt = except "(" Params ")" Block
   LoopExceptStmt = except "(" Params ")" LoopBlock  --with_args
-  				       | except LoopBlock					        --no_args
-  				 
+                 | except LoopBlock					        --no_args
+           
   ReturnStmt = return Exp
   BreakStmt = break
   ContinueStmt = continue
@@ -90,7 +90,7 @@ Pythscrip {
   
   LoopBlock = ":" LoopStmts* ";"
   LoopStmts = Exp 
-  			    | PrintStmt 
+            | PrintStmt 
             | LoopIfStmt 
             | LoopTryStmt 
             | LoopExceptStmt 
@@ -98,8 +98,11 @@ Pythscrip {
             | ContinueStmt
   
   ForLoopExpression = RangeExpression+ "," RangeExpression+ ("," digit+)? --range
-  					| Exp
-  RangeExpression = digit | id | "#" id --var_length
+                    | Exp
+
+  RangeExpression = digit 
+                  | id 
+                  | "#" id --var_length
   
   Block = ":" Body ";"
 
