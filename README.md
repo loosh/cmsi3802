@@ -1,13 +1,14 @@
 # PythScrip
-![PythScrip](https://github.com/loosh/pythscrip/assets/89878786/c208addd-c23c-4691-9069-08b66eafdde1)
+
+![logo](/docs/logo.png)
 
 PythScrip is a "mini"-golfing language that incorperates syntax and features from both Python and Javascript to create an improved version of Pyth with advanced features such as functions, classes, repeating, and more. Pythscrip is inspired by the concise syntax of Pyth and also utilizes its compact math syntax
 
 ---
+
 ##### Authors: Lucian Prinz and Nicolas Ortiz
 
---- 
-
+---
 
 ## Features
 
@@ -72,6 +73,7 @@ f addFive(x) => r +x 5
 ### Logic Statements
 
 #### If Statements
+
 ##### Javascript
 
 ```
@@ -97,17 +99,23 @@ x = 5
 #### Ternary Statements
 
 ##### Javascript
+
 ```
-height > 6 ? true : false 
+height > 6 ? true : false
 ```
+
 ##### Pythscrip
+
 ```
 true ? height > 6 ! false
 ```
+
 ---
+
 ### Try Catch/Except
 
 #### Javascript
+
 ```
 try{
   if(height < 6) throw "Too Short"
@@ -116,15 +124,20 @@ catch(error) {
   console.log(error)
 }
 ```
+
 #### Pythscrip
+
 ```
 t: ?height < 6: th 'Too Short';;
 e(error): log(error);
 ```
+
 ---
 
 ### Loops
+
 #### For Loop
+
 ##### Javascript
 
 ```
@@ -139,6 +152,7 @@ for (let i = 0; i < s.length(); i++) {
 ```
 
 ##### Pythscrip
+
 ```
 i in 1,10:
   log(*i 10);
@@ -148,7 +162,9 @@ i in 0,#s: log(s[i]);
 ```
 
 #### While Loop
+
 ##### Javascript
+
 ```
 var i = -10
 while (i <= 10) {
@@ -158,7 +174,9 @@ while (i <= 10) {
   i += 1
 }
 ```
+
 ##### Pythscrip
+
 ```
 i = _10
 w i<=10:
@@ -168,6 +186,7 @@ w i<=10:
   i += 1
 ;
 ```
+
 ---
 
 ### Quick Repeat
@@ -181,12 +200,14 @@ w i<=10:
 #### Pythscrip
 
 ```
-*.5: 
+*.5:
   log('this will log 5 times');
 ```
 
 ---
+
 ## Examples
+
 ### Getting Length of Array or String
 
 #### Javascript
@@ -224,6 +245,7 @@ const gcd = (a,b) => {
 ```
 
 #### Pythscrip
+
 ```
 f gcd(a,b) =>
   ?a==b: r a;
@@ -231,7 +253,10 @@ f gcd(a,b) =>
   !: r gcd(a,b);
   ;
 ```
+
 Or, if you would like it in one line
+
 ```
 fgcd(a,b)=>?a==b:ra;!?a>b:rgcd(-a b,b);!:rgcd(a,b);;
 ```
+
