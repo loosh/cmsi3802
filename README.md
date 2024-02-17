@@ -65,7 +65,7 @@ const addFive = (x) => { return x + 5; }
 #### Pythscrip
 
 ```
-f addFive(x) => r +x 5
+f addFive(x) => r +x 5;
 ```
 
 ---
