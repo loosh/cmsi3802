@@ -1,6 +1,6 @@
 Pythscrip {
   Program = Stmt+
-  Stmt = | FuncDecl
+  Stmt = FuncDecl
        | PrintStmt
        | IfStmt
        | WhileStmt
