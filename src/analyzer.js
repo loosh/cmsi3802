@@ -83,10 +83,10 @@ export default function analyze(match) {
       Exp3_math_assign(left, op, right) {
         return new core.MathAssignmentExpression(op.sourceString, left.rep(), right.rep());
       },
-      Exp4_postfix(exp, op) {
+      Prefix_unary(op, exp) {
         return new core.UnaryExpression(op.sourceString, exp.rep());
       },
-      Exp5_prefix(op, exp) {
+      Postfix_unary(exp, op) {
         return new core.UnaryExpression(op.sourceString, exp.rep());
       },
       Primary_array(_open, elements, _close) {

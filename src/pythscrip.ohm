@@ -27,14 +27,14 @@ Pythscrip {
   Exp2 = Exp2 relop Exp3                  --relational
        | Exp3
   Exp3 = Exp3 math_assign_op Exp3         --math_assign
-       | Exp4
-  Exp4 = Exp4 ("++" | "--" | "F")         --postfix
-       | Exp5
-  Exp5 = ("#" | "~" | "_") Exp5           --prefix
-       | Term
+       | Postfix
+  Postfix = Postfix ("++" | "--" | "F")   --unary
+          | Term
   Term = binary_op Term Term              --binary
        | Factor
   Factor = Primary "^" Factor             --exponential
+         | Prefix 
+  Prefix = ("#" | "~" | "_") Prefix       --unary
          | Primary
   Primary = numlit
           | stringlit
