@@ -16,9 +16,8 @@ Pythscrip {
   
   Assignment = id "=" Exp
       
-  FuncDecl = "f" id "(" Params ")" "=>" Body ";"
+  FuncDecl = "f" id "(" Params ")" "=>" Stmt* ";"
   Params = ListOf<Exp, ","> 
-  Body = Exp* Stmt*
 
   Exp = Exp1 "?" Exp1 "!" Exp           --conditional
       | Exp1
@@ -96,7 +95,7 @@ Pythscrip {
                   | id 
                   | "#" id --var_length
   
-  Block = ":" Body ";"
+  Block = ":" Stmt* ";"
 
   log = "log" ~idchar
   function = "f" ~idchar

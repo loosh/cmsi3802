@@ -29,6 +29,14 @@ const goodPrograms = [
   'log(*a +1 *b 0.01)',
   `['banana', 'apple', 'orange']`,
   `i in 1, 10: ?%i 2: log(i); !: br;;`,
+  `b++
+  b--`,
+  `obj = {a: +5 2, b: 10}
+  log(obj.a)`,
+  `a=0
+  *.5: log('this will log 5 times');
+  a++
+  *.10: log('this will log 10 times');`,
 ];
 
 const badPrograms = [
