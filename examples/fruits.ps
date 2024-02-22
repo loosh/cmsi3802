@@ -1,5 +1,12 @@
 fruits = ['apple', 'banana', 'cherry']
 
+?#fruits > 2:
+  log('There are more than 2 fruits');
+!? #fruits == 2:
+  log('There are 2 fruits');
+!:
+  log('There are less than 2 fruits');
+
 fruit in fruits:
   ?fruit=='banana': 
     br; 

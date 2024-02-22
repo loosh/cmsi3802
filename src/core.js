@@ -37,8 +37,14 @@ export class ContinueStmt {
 }
 
 export class ForStmt {
-  constructor(variable, start, end, step, body) {
-    Object.assign(this, { variable, start, end, step, body });
+  constructor(variable, iteration, body) {
+    Object.assign(this, { variable, iteration, body });
+  }
+}
+
+export class IterationExpression {
+  constructor(start, end, step) {
+    Object.assign(this, { start, end, step });
   }
 }
 
@@ -78,9 +84,33 @@ export class FuncCall {
   }
 }
 
+export class ArrayIndex {
+  constructor(id, index) {
+    Object.assign(this, { id, index });
+  }
+}
+
+export class ConditionalExpression {
+  constructor(test, consequent, alternate) {
+    Object.assign(this, { test, consequent, alternate });
+  }
+}
+
 export class RelationalExpression {
   constructor(op, left, right) {
     Object.assign(this, { op, left, right });
+  }
+}
+
+export class LogicalExpression {
+  constructor(op, left, right) {
+    Object.assign(this, { op, left, right });
+  }
+}
+
+export class ArrayExpression {
+  constructor(elements) {
+    this.elements = elements;
   }
 }
 

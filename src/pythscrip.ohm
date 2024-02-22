@@ -28,11 +28,9 @@ Pythscrip {
        | Exp3
   Exp3 = Exp3 math_assign_op Exp3       --math_assign
        | Exp4
-  Exp4 = Exp4 ("++" | "--")             --quickcrement
+  Exp4 = Exp4 ("++" | "--" | "F")       --unary
        | Exp5
-  Exp5 = Exp5 "F"                       --factorial
-       | Exp6
-  Exp6 = "~" Exp6                       --negation
+  Exp5 = "~" Exp5                       --negation
        | Term
   Term = binary_op Term Term            --binary
        | Factor
@@ -43,7 +41,7 @@ Pythscrip {
           | FuncCall
           | "[" ListOf<Exp, ","> "]"      --array
           | "{" ListOf<DictItem, ","> "}" --dict
-          | "#" id                        --length       
+          | "#" Primary                    --length       
           | id "[" (digit+ | id) "]"      --array_index       
           | id "." id                     --get_object_dot
           | id "[" Exp "]"                --get_object_bracket        
@@ -66,7 +64,7 @@ Pythscrip {
              | "?" Exp LoopBlock                 --plain_if
   
   WhileStmt = "w" Exp LoopBlock
-  ForStmt = id in ForLoopExpression LoopBlock
+  ForStmt = id in IterationExpression LoopBlock
   RepeatStmt = "*" "." digit+ Block
   TryStmt = try Block
   LoopTryStmt = try LoopBlock
@@ -88,12 +86,12 @@ Pythscrip {
             | BreakStmt 
             | ContinueStmt
   
-  ForLoopExpression = RangeExpression+ "," RangeExpression+ ("," digit+)? --range
+  IterationExpression = RangeExpression "," RangeExpression ("," RangeExpression)? --range
                     | Exp
 
-  RangeExpression = digit 
-                  | id 
-                  | "#" id --var_length
+  RangeExpression = digit+       --int
+                  | id           --id
+                  | "#" Exp       --var_length
   
   Block = ":" Stmt* ";"
 

@@ -16,7 +16,7 @@ if (process.argv.length !== 3) {
     const match = parse(buffer.toString());
     const rep = analyze(match);
 
-    console.log(util.inspect(rep, { depth: 5, colors: true }));
+    console.log(util.inspect(rep, { depth: 8, colors: true }));
 
     // add pipeline operator (print(1) |> buffer |> match |> rep to language)
 
