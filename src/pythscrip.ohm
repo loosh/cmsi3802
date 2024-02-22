@@ -23,7 +23,7 @@ Pythscrip {
   Exp = Exp1 "?" Exp1 "!" Exp           --conditional
       | Exp1
   Exp1 = Exp1 ("|" Exp2)*               --or
-       | Exp2("&" Exp2)*                --and
+       | Exp1 ("&" Exp2)*                --and
        | Exp2
   Exp2 = Exp2 relop Exp3                --relational
        | Exp3
@@ -35,21 +35,21 @@ Pythscrip {
        | Exp6
   Exp6 = "~" Exp6                       --negation
        | Term
-  Term = binary_op Term Term          --binary
+  Term = binary_op Term Term           --binary
        | Factor
   Factor = Primary "^" Factor           --exponential
          | Primary
   Primary = numlit
-        | stringlit
-        | FuncCall
-        | "[" ListOf<Exp, ","> "]"      --array
-        | "{" ListOf<DictItem, ","> "}" --dict
-        | "#" id                        --length       
-        | id "[" (digit+ | id) "]"      --array_index       
-        | id "." id                     --get_object_dot
-        | id "[" Exp "]"                --get_object_bracket        
-        | "_" Exp                       --negative
-        | id
+          | stringlit
+          | FuncCall
+          | "[" ListOf<Exp, ","> "]"      --array
+          | "{" ListOf<DictItem, ","> "}" --dict
+          | "#" id                        --length       
+          | id "[" (digit+ | id) "]"      --array_index       
+          | id "." id                     --get_object_dot
+          | id "[" Exp "]"                --get_object_bracket        
+          | "_" Exp                       --negative
+          | id
 
   relop = "<=" | ">=" | "==" | "!=" | "<" | ">"
   math_assign_op = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
