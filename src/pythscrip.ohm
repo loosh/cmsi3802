@@ -6,7 +6,7 @@ Pythscrip {
        | WhileStmt
        | ForStmt
        | FuncCall
-       | VarDecl
+       | Assignment
        | Exp
        | RepeatStmt
        | ThrowStmt
@@ -14,42 +14,32 @@ Pythscrip {
        | ExceptStmt
        | ReturnStmt
   
-  VarDecl = id "=" Exp                  --assignment
+  Assignment = id "=" Exp
       
   FuncDecl = "f" id "(" Params ")" "=>" Body ";"
   Params = ListOf<Exp, ","> 
   Body = Exp* Stmt*
 
-  Exp = Exp1 "?" Exp1 "!" Exp           --ternary
+  Exp = Exp1 "?" Exp1 "!" Exp           --conditional
       | Exp1
   Exp1 = Exp1 ("|" Exp2)*               --or
        | Exp2("&" Exp2)*                --and
        | Exp2
-  Exp2 = Exp2 relop Exp3                --relop
+  Exp2 = Exp2 relop Exp3                --relational
        | Exp3
-  Exp3 = Exp3 "++"                      --increment
-       | Exp3 "--"                      --decrement
+  Exp3 = Exp3 math_assign_op Exp3       --math_assign
        | Exp4
-  Exp4 = Exp4 "F"                       --factorial
+  Exp4 = Exp4 ("++" | "--")             --quickcrement
        | Exp5
-  Exp5 = "~" Exp5                       --negation
+  Exp5 = Exp5 "F"                       --factorial
        | Exp6
-  Exp6 = Exp6 "+=" Exp6                 --add_assign
-       | Exp6 "-=" Exp6                 --subtract_assign
-       | Exp6 "*=" Exp6                 --multiply_assign
-       | Exp6 "/=" Exp6                 --divide_assign
-       | Exp6 "%=" Exp6                 --mod_assign
-       | Exp6 "^=" Exp6                 --exponent_assign
-       | Exp7
-  Exp7 = ("*" | "/") Exp7 Exp7          --multiplicative
-       | Exp8                     
-  Exp8 = ("+" | "-") Exp7 Exp7          --additive
-       | Exp9                     
-  Exp9 = "%" Exp9 Exp10                 --modulus
-       | Exp10
-  Exp10 = "^" Exp10 Exp11               --exponential
-        | Exp11
-  Exp11 = numlit
+  Exp6 = "~" Exp6                       --negation
+       | Term
+  Term = binary_op Term Term          --binary
+       | Factor
+  Factor = Primary "^" Factor           --exponential
+         | Primary
+  Primary = numlit
         | stringlit
         | FuncCall
         | "[" ListOf<Exp, ","> "]"      --array
@@ -62,6 +52,8 @@ Pythscrip {
         | id
 
   relop = "<=" | ">=" | "==" | "!=" | "<" | ">"
+  math_assign_op = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
+  binary_op = "+" | "-" | "*" | "/" | "%" | "^"
 
   FuncCall = id "(" Params ")"
   PrintStmt = log "(" Exp ")"
