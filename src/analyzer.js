@@ -39,23 +39,12 @@ export default function analyze(match) {
       LoopIfStmt_plain_if(_q, condition, b1) {
         return new core.IfStmt(condition.rep(), b1.rep());
       },
-      ForStmt(id, _in, iteration, block) {
-        return new core.ForStmt(id.sourceString, iteration.rep(), block.rep());
+      ForStmt_range(id, _in, start, _comma, end, _step, step, block) {
+        let stepValue = step.children.length > 0 ? step.rep() : 1;
+        return new core.ForStmt(id.sourceString, start.rep(), end.rep(), stepValue, block.rep());
       },
-      IterationExpression_range(start, _between, end, _right, step) {
-        if (step.children.length === 0) {
-          return new core.IterationExpression(start.rep(), end.rep());
-        }
-        return new core.IterationExpression(start.rep(), end.rep(), step.rep());
-      },
-      RangeExpression_int(_num) {
-        return new core.Number(this.sourceString);
-      },
-      RangeExpression_id(id) {
-        return new core.Variable(id.sourceString);
-      },
-      RangeExpression_var_length(_hashtag, exp) {
-        return new core.IntrinsicFunction('len', exp.rep());
+      ForStmt_direct(id, _in, exp, block) {
+        return new core.ForStmt(id.sourceString, exp.rep(), null, null, block.rep());
       },
       WhileStmt(_while, exp, block) {
         return new core.WhileStmt(exp.rep(), block.rep());
@@ -89,26 +78,25 @@ export default function analyze(match) {
         return new core.LogicalExpression('and', left.rep(), right.rep());
       },
       Exp2_relational(left, op, right) {
-        console.log(left, op, right);
         return new core.RelationalExpression(op.sourceString, left.rep(), right.rep());
       },
       Exp3_math_assign(left, op, right) {
         return new core.MathAssignmentExpression(op.sourceString, left.rep(), right.rep());
       },
-      Exp4_unary(exp, op) {
-        return new core.UnaryExpresion(op.sourceString, exp.rep());
+      Exp4_postfix(exp, op) {
+        return new core.UnaryExpression(op.sourceString, exp.rep());
       },
-      Exp5_negation(_not, exp) {
-        return new core.NegationExpression(exp.rep());
+      Exp5_prefix(op, exp) {
+        return new core.UnaryExpression(op.sourceString, exp.rep());
       },
       Primary_array(_open, elements, _close) {
         return new core.ArrayExpression(elements.rep());
       },
-      Primary_array_index(id, _open, index, _close) {
-        return new core.ArrayIndex(id.rep(), index.rep());
+      Primary_get_object_dot(id, _dot, prop) {
+        return new core.AccessExpression(id.sourceString, prop.sourceString);
       },
-      Primary_length(_hashtag, exp) {
-        return new core.IntrinsicFunction('len', exp.rep());
+      Primary_get_bracket(id, _open, index, _close) {
+        return new core.AccessExpression(id.sourceString, index.rep());
       },
       Term_binary(op, left, right) {
         return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());

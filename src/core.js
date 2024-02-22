@@ -37,14 +37,13 @@ export class ContinueStmt {
 }
 
 export class ForStmt {
-  constructor(variable, iteration, body) {
-    Object.assign(this, { variable, iteration, body });
-  }
-}
-
-export class IterationExpression {
-  constructor(start, end, step) {
-    Object.assign(this, { start, end, step });
+  constructor(variable, expression1, expression2, step = 1, loopBlock) {
+    this.variable = variable; // The loop variable
+    this.loopType = expression2 ? 'range' : 'direct'; // Determine loop type based on the presence of expression2
+    this.expression1 = expression1; // Start expression for range or the expression for direct
+    this.expression2 = expression2 || null; // End expression for range, null for direct
+    this.step = step; // Step for range, null if not provided
+    this.loopBlock = loopBlock; // The loop body
   }
 }
 
@@ -84,7 +83,7 @@ export class FuncCall {
   }
 }
 
-export class ArrayIndex {
+export class AccessExpression {
   constructor(id, index) {
     Object.assign(this, { id, index });
   }

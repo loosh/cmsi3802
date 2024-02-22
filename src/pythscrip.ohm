@@ -19,33 +19,30 @@ Pythscrip {
   Function = "f" id "(" Params ")" "=>" Stmt* ";"
   Params = ListOf<Exp, ","> 
 
-  Exp = Exp1 "?" Exp1 "!" Exp           --conditional
+  Exp = Exp1 "?" Exp1 "!" Exp             --conditional
       | Exp1
-  Exp1 = Exp1 ("|" Exp2)*               --or
-       | Exp1 ("&" Exp2)*               --and
+  Exp1 = Exp1 ("|" Exp2)*                 --or
+       | Exp1 ("&" Exp2)*                 --and
        | Exp2
-  Exp2 = Exp2 relop Exp3                --relational
+  Exp2 = Exp2 relop Exp3                  --relational
        | Exp3
-  Exp3 = Exp3 math_assign_op Exp3       --math_assign
+  Exp3 = Exp3 math_assign_op Exp3         --math_assign
        | Exp4
-  Exp4 = Exp4 ("++" | "--" | "F")       --unary
+  Exp4 = Exp4 ("++" | "--" | "F")         --postfix
        | Exp5
-  Exp5 = "~" Exp5                       --negation
+  Exp5 = ("#" | "~" | "_") Exp5           --prefix
        | Term
-  Term = binary_op Term Term            --binary
+  Term = binary_op Term Term              --binary
        | Factor
-  Factor = Primary "^" Factor           --exponential
+  Factor = Primary "^" Factor             --exponential
          | Primary
   Primary = numlit
           | stringlit
           | FuncCall
           | "[" ListOf<Exp, ","> "]"      --array
           | "{" ListOf<DictItem, ","> "}" --dict
-          | "#" Primary                    --length       
-          | id "[" (digit+ | id) "]"      --array_index       
           | id "." id                     --get_object_dot
-          | id "[" Exp "]"                --get_object_bracket        
-          | "_" Exp                       --negative
+          | id "[" Exp "]"                --get_bracket        
           | id
 
   relop = "<=" | ">=" | "==" | "!=" | "<" | ">"
@@ -55,16 +52,18 @@ Pythscrip {
   FuncCall = id "(" Params ")"
   PrintStmt = log "(" Exp ")"
 
-  IfStmt = "?" Exp Block "!" Block      --with_else
-         | "?" Exp Block "!" IfStmt     --nested_if
-         | "?" Exp Block                --plain_if
+  IfStmt = "?" Exp Block "!" Block                  --with_else
+         | "?" Exp Block "!" IfStmt                 --nested_if
+         | "?" Exp Block                            --plain_if
   
-  LoopIfStmt = "?" Exp LoopBlock "!" LoopBlock   --with_else
-             | "?" Exp LoopBlock "!" IfStmt      --nested_if
-             | "?" Exp LoopBlock                 --plain_if
+  LoopIfStmt = "?" Exp LoopBlock "!" LoopBlock      --with_else
+             | "?" Exp LoopBlock "!" IfStmt         --nested_if
+             | "?" Exp LoopBlock                    --plain_if
   
   WhileStmt = "w" Exp LoopBlock
-  ForStmt = id in IterationExpression LoopBlock
+  ForStmt = id in Exp "," Exp ("," Exp)? LoopBlock  --range
+          | id in Exp LoopBlock                     --direct
+
   RepeatStmt = "*" "." digit+ Block
   TryStmt = try Block
   LoopTryStmt = try LoopBlock
@@ -85,13 +84,6 @@ Pythscrip {
             | LoopExceptStmt 
             | BreakStmt 
             | ContinueStmt
-  
-  IterationExpression = RangeExpression "," RangeExpression ("," RangeExpression)? --range
-                    | Exp
-
-  RangeExpression = digit+       --int
-                  | id           --id
-                  | "#" Exp       --var_length
   
   Block = ":" Stmt* ";"
 
