@@ -28,12 +28,30 @@ export class WhileStmt {
   }
 }
 
+export class TryStmt {
+  constructor(body, except) {
+    Object.assign(this, { body, except });
+  }
+}
+
+export class ExceptStmt {
+  constructor(body, params) {
+    Object.assign(this, { body, params });
+  }
+}
+
 export class BreakStmt {
   constructor() { }
 }
 
 export class ContinueStmt {
   constructor() { }
+}
+
+export class ThrowStmt {
+  constructor(exp) {
+    Object.assign(this, { exp });
+  }
 }
 
 export class ForStmt {

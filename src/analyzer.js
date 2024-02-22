@@ -48,6 +48,18 @@ export default function analyze(match) {
       WhileStmt(_while, exp, block) {
         return new core.WhileStmt(exp.rep(), block.rep());
       },
+      TryStmt(_try, block, except) {
+        return new core.TryStmt(block.rep(), except.rep());
+      },
+      LoopTryStmt(_try, block, except) {
+        return new core.TryStmt(block.rep(), except.rep());
+      },
+      ExceptStmt(_except, _left, params, _right, block) {
+        return new core.ExceptStmt(params.rep(), block.rep());
+      },
+      LoopExceptStmt(_except, _left, params, _right, block) {
+        return new core.ExceptStmt(params.rep(), block.rep());
+      },
       RepeatStmt(_star, _dot, count, block) {
         const repeatCount = parseInt(count.children.map(c => c.sourceString).join(''), 10);
         return new core.RepeatStmt(repeatCount, block.rep());
@@ -63,6 +75,9 @@ export default function analyze(match) {
       },
       ContinueStmt(_continue) {
         return new core.ContinueStmt();
+      },
+      ThrowStmt(_throw, exp) {
+        return new core.ThrowStmt(exp.rep());
       },
       ReturnStmt(_return, exp) {
         return new core.ReturnStmt(exp.rep());

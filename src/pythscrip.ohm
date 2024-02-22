@@ -11,7 +11,6 @@ Pythscrip {
        | RepeatStmt
        | ThrowStmt
        | TryStmt
-       | ExceptStmt
        | ReturnStmt
   
   Assignment = id "=" Exp
@@ -65,11 +64,10 @@ Pythscrip {
           | id in Exp LoopBlock                     --direct
 
   RepeatStmt = "*" "." digit+ Block
-  TryStmt = try Block
-  LoopTryStmt = try LoopBlock
+  TryStmt = try Block ExceptStmt
+  LoopTryStmt = try LoopBlock LoopExceptStmt
   ExceptStmt = except "(" Params ")" Block
-  LoopExceptStmt = except "(" Params ")" LoopBlock  --with_args
-                 | except LoopBlock                 --no_args
+  LoopExceptStmt = except "(" Params ")" LoopBlock
            
   ReturnStmt = return Exp
   BreakStmt = break
@@ -81,7 +79,6 @@ Pythscrip {
             | PrintStmt 
             | LoopIfStmt 
             | LoopTryStmt 
-            | LoopExceptStmt 
             | BreakStmt 
             | ContinueStmt
   
