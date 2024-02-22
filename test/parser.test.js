@@ -21,7 +21,7 @@ const goodPrograms = [
   w fruit: log(5) t: fetchAPI(); e():log('failed');;`,
   `?5>2: th 'test';`,
   `*.5: log('this will log 5 times');`,
-  `fgcd(a,b)=>?a==b:ra;!?a>b:rgcd(-a b, b);!:rgcd(a,b);;
+  `fgcd(a,b)=>?a==b:r a;!?a>b:r gcd(-a b, b);!:r gcd(a,b);;
   gcd(12, 20)`,
   'gcd()',
   'b+=1',

@@ -91,6 +91,12 @@ export default function analyze(match) {
       Primary_array(_open, elements, _close) {
         return new core.ArrayExpression(elements.rep());
       },
+      Primary_dict(_open, elements, _close) {
+        return new core.DictExpression(elements.rep());
+      },
+      DictItem(id, _colon, exp) {
+        return new core.DictItem(id.sourceString, exp.rep());
+      },
       Primary_get_object_dot(id, _dot, prop) {
         return new core.AccessExpression(id.sourceString, prop.sourceString);
       },

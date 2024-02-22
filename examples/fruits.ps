@@ -1,4 +1,5 @@
 fruits = ['apple', 'banana', 'cherry']
+obj = {name:'John', favfruitindex: 0}
 
 ?#fruits > 2:
   log('There are more than 2 fruits');
@@ -23,4 +24,8 @@ i in 1,5:
 x=0
 w x < #fruits:
   log(fruits[x])
-  log(fruits[10]);
+  log(fruits[10])
+  log(obj.name)
+  log(fruits[obj.favfruitindex])
+  log(obj['name'])
+;

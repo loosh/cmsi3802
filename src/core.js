@@ -113,6 +113,19 @@ export class ArrayExpression {
   }
 }
 
+export class DictExpression {
+  constructor(elements) {
+    // elements is a list of dict items
+    this.elements = elements;
+  }
+}
+
+export class DictItem {
+  constructor(key, value) {
+    Object.assign(this, { key, value });
+  }
+}
+
 export class BinaryExpression {
   constructor(op, left, right) {
     Object.assign(this, { op, left, right });
