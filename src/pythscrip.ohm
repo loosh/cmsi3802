@@ -1,6 +1,6 @@
 Pythscrip {
   Program = Stmt+
-  Stmt = FuncDecl
+  Stmt = Function
        | PrintStmt
        | IfStmt
        | WhileStmt
@@ -16,7 +16,7 @@ Pythscrip {
   
   Assignment = id "=" Exp
       
-  FuncDecl = "f" id "(" Params ")" "=>" Stmt* ";"
+  Function = "f" id "(" Params ")" "=>" Stmt* ";"
   Params = ListOf<Exp, ","> 
 
   Exp = Exp1 "?" Exp1 "!" Exp           --conditional

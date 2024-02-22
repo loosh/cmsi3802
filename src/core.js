@@ -72,6 +72,12 @@ export class Function {
   }
 }
 
+export class FuncCall {
+  constructor(name, args) {
+    Object.assign(this, { name, args });
+  }
+}
+
 export class RelationalExpression {
   constructor(op, left, right) {
     Object.assign(this, { op, left, right });
@@ -93,6 +99,12 @@ export class UnaryExpression {
 export class Number {
   constructor(value) {
     this.value = value;
+  }
+}
+
+export class ReturnStmt {
+  constructor(source) {
+    this.source = source;
   }
 }
 

@@ -14,6 +14,13 @@ export default function analyze(match) {
       PrintStmt(_log, _open, exp, _close) {
         return new core.PrintStmt(exp.rep());
       },
+      Function(_f, id, _open, params, _close, _arrow, statements, _semi) {
+        return new core.Function(id.sourceString, params.rep(), statements.children.map(s => s.rep()));
+      },
+      FuncCall(id, _open, params, _close) {
+        console.log(params.children);
+        return new core.FuncCall(id.sourceString, params.rep());
+      },
       IfStmt_with_else(_q, condition, _b1, _e, _b2) {
         return new core.IfStatement(condition.rep(), _b1.rep(), _b2.rep());
       },
@@ -34,10 +41,13 @@ export default function analyze(match) {
         return new core.Block(statements.children.map(s => s.rep()));
       },
       BreakStmt(_break) {
-        return new core.BreakStatement();
+        return new core.BreakStmt();
       },
       ContinueStmt(_continue) {
-        return new core.ContinueStatement();
+        return new core.ContinueStmt();
+      },
+      ReturnStmt(_return, exp) {
+        return new core.ReturnStmt(exp.rep());
       },
       Exp2_relational(left, op, right) {
         return new core.RelationalExpression(op.sourceString, left.rep(), right.rep());
@@ -51,6 +61,12 @@ export default function analyze(match) {
       stringlit(_left, _chars, _right) {
         return new core.String(this.sourceString);
       },
+      id(_letter, _id) {
+        return new core.Variable(this.sourceString);
+      },
+      NonemptyListOf(first, _, rest) {
+        return [first.rep(), ...rest.children.map(c => c.rep())];
+      }
     });
 
   return analyzer(match).rep();
