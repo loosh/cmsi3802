@@ -257,6 +257,6 @@ f gcd(a,b) =>
 Or, if you would like it in one line
 
 ```
-fgcd(a,b)=>?a==b:ra;!?a>b:rgcd(-a b,b);!:rgcd(a,b);;
+fgcd(a,b)=>?a==b:r a;!?a>b:r gcd(-a b,b);!:r gcd(a,b);;
 ```
 

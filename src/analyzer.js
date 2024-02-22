@@ -18,7 +18,6 @@ export default function analyze(match) {
         return new core.Function(id.sourceString, params.rep(), statements.children.map(s => s.rep()));
       },
       FuncCall(id, _open, params, _close) {
-        console.log(params.children);
         return new core.FuncCall(id.sourceString, params.rep());
       },
       IfStmt_with_else(_q, condition, b1, _e, _b2) {
