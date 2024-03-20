@@ -35,8 +35,8 @@ export class TryStmt {
 }
 
 export class ExceptStmt {
-  constructor(body, params) {
-    Object.assign(this, { body, params });
+  constructor(params, body) {
+    Object.assign(this, { params, body });
   }
 }
 
@@ -55,13 +55,13 @@ export class ThrowStmt {
 }
 
 export class ForStmt {
-  constructor(variable, expression1, expression2, step = 1, loopBlock) {
+  constructor(variable, expression1, expression2, step = 1, body) {
     this.variable = variable; // The loop variable
     this.loopType = expression2 ? 'range' : 'direct'; // Determine loop type based on the presence of expression2
     this.expression1 = expression1; // Start expression for range or the expression for direct
     this.expression2 = expression2 || null; // End expression for range, null for direct
     this.step = step; // Step for range, null if not provided
-    this.loopBlock = loopBlock; // The loop body
+    this.body = body; // The loop body
   }
 }
 

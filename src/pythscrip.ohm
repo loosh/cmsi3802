@@ -12,6 +12,8 @@ Pythscrip {
        | ThrowStmt
        | TryStmt
        | ReturnStmt
+       | BreakStmt
+       | ContinueStmt
   
   Assignment = id "=" Exp
       
@@ -55,32 +57,20 @@ Pythscrip {
          | "?" Exp Block "!" IfStmt                 --nested_if
          | "?" Exp Block                            --plain_if
   
-  LoopIfStmt = "?" Exp LoopBlock "!" LoopBlock      --with_else
-             | "?" Exp LoopBlock "!" IfStmt         --nested_if
-             | "?" Exp LoopBlock                    --plain_if
-  
-  WhileStmt = "w" Exp LoopBlock
-  ForStmt = id in Exp "," Exp ("," Exp)? LoopBlock  --range
-          | id in Exp LoopBlock                     --direct
+  WhileStmt = "w" Exp Block
+  ForStmt = id in Exp "," Exp ("," Exp)? Block  --range
+          | id in Exp Block                     --direct
 
   RepeatStmt = "*" "." digit+ Block
   TryStmt = try Block ExceptStmt
-  LoopTryStmt = try LoopBlock LoopExceptStmt
+  LoopTryStmt = try Block LoopExceptStmt
   ExceptStmt = except "(" Params ")" Block
-  LoopExceptStmt = except "(" Params ")" LoopBlock
+  LoopExceptStmt = except "(" Params ")" Block
            
   ReturnStmt = return Exp
   BreakStmt = break
   ContinueStmt = continue
   ThrowStmt = throw Exp
-  
-  LoopBlock = ":" LoopStmts* ";"
-  LoopStmts = Exp 
-            | PrintStmt 
-            | LoopIfStmt 
-            | LoopTryStmt 
-            | BreakStmt 
-            | ContinueStmt
   
   Block = ":" Stmt* ";"
 

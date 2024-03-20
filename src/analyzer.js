@@ -1,5 +1,29 @@
 import * as core from './core.js';
 
+class Context {
+  // Like most statically-scoped languages, Carlos contexts will contain a
+  // map for their locally declared identifiers and a reference to the parent
+  // context. The parent of the global context is null. In addition, the
+  // context records whether analysis is current within a loop (so we can
+  // properly check break statements), and reference to the current function
+  // (so we can properly check return statements).
+  constructor({ parent = null, locals = new Map(), inLoop = false, function: f = null }) {
+    Object.assign(this, { parent, locals, inLoop, function: f });
+  }
+  add(name, entity) {
+    this.locals.set(name, entity);
+  }
+  lookup(name) {
+    return this.locals.get(name) || this.parent?.lookup(name);
+  }
+  static root() {
+    return new Context({ locals: new Map(Object.entries(core.standardLibrary)) });
+  }
+  newChildContext(props) {
+    return new Context({ ...this, ...props, parent: this, locals: new Map() });
+  }
+}
+
 export default function analyze(match) {
 
   const analyzer = match.matcher.grammar
@@ -32,12 +56,6 @@ export default function analyze(match) {
       IfStmt_with_else(_q, condition, b1, _e, b2) {
         return new core.IfStmt(condition.rep(), b1.rep(), b2.rep());
       },
-      LoopIfStmt_nested_if(_q, condition, b1, _e, b2) {
-        return new core.IfStmt(condition.rep(), b1.rep(), b2.rep());
-      },
-      LoopIfStmt_plain_if(_q, condition, b1) {
-        return new core.IfStmt(condition.rep(), b1.rep());
-      },
       ForStmt_range(id, _in, start, _comma, end, _step, step, block) {
         let stepValue = step.children.length > 0 ? step.rep() : 1;
         return new core.ForStmt(id.sourceString, start.rep(), end.rep(), stepValue, block.rep());
@@ -65,9 +83,6 @@ export default function analyze(match) {
         return new core.RepeatStmt(repeatCount, block.rep());
       },
       Block(_open, statements, _close) {
-        return new core.Block(statements.children.map(s => s.rep()));
-      },
-      LoopBlock(_open, statements, _close) {
         return new core.Block(statements.children.map(s => s.rep()));
       },
       BreakStmt(_break) {
