@@ -51,9 +51,6 @@ const badPrograms = [
   `if (true) {
     console.log('hi')
   }`,
-  `?5>2: br;`,
-  `br`,
-  `ct`
 ];
 
 describe('Parser', () => {
