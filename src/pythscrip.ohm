@@ -1,100 +1,92 @@
 Pythscrip {
-  Program = Stmt+
-  Stmt = Function
-       | PrintStmt
-       | IfStmt
-       | WhileStmt
-       | ForStmt
-       | FuncCall
-       | Assignment
-       | Exp
-       | RepeatStmt
-       | ThrowStmt
-       | TryStmt
-       | ReturnStmt
-       | BreakStmt
-       | ContinueStmt
+  Program   = Statement+
+  Statement = FuncDecl
+            | PrintStmt
+            | IfStmt
+            | LoopStmt
+            | Primary_call
+            | VarDecl
+            | Exp
+            | TryStmt
+            | throw Exp                                --throw
+            | return Exp                               --return
+            | return                                   --shortreturn    
+            | break                                    --break
+            | continue                                 --continue
   
-  Assignment = id "=" Exp
+  VarDecl   = id "=" Exp
       
-  Function = "f" id "(" Params ")" "=>" Stmt* ";"
-  Params = ListOf<Exp, ","> 
+  FuncDecl  = "f" id Params "=>" Statement* ";"
+  Params    = "(" ListOf<Param, ","> ")"
+  Param     = id
 
-  Exp = Exp1 "?" Exp1 "!" Exp             --conditional
-      | Exp1
-  Exp1 = Exp1 ("|" Exp2)*                 --or
-       | Exp1 ("&" Exp2)*                 --and
-       | Exp2
-  Exp2 = Exp2 relop Exp3                  --relational
-       | Exp3
-  Exp3 = Exp3 math_assign_op Exp3         --math_assign
-       | Postfix
-  Postfix = Postfix ("++" | "--" | "F")   --unary
-          | Term
-  Term = binary_op Term Term              --binary
-       | Factor
-  Factor = Primary "^" Factor             --exponential
-         | Prefix 
-  Prefix = ("#" | "~" | "_") Prefix       --unary
-         | Primary
-  Primary = numlit
-          | stringlit
-          | FuncCall
-          | "[" ListOf<Exp, ","> "]"      --array
-          | "{" ListOf<DictItem, ","> "}" --dict
-          | id "." id                     --get_object_dot
-          | id "[" Exp "]"                --get_bracket        
-          | id
+  Exp       = Exp1 "?" Exp1 "!" Exp                    --conditional
+            | Exp1
+  Exp1      = Exp1 ("|" Exp2)*                         --or
+            | Exp1 ("&" Exp2)*                         --and
+            | Exp2
+  Exp2      = Exp2 relop Exp3                          --relational
+            | Exp3
+  Exp3      = Exp3 assignop Exp3                       --math_assign
+            | Postfix
+  Postfix   = Postfix ("++" | "--" | "F")              --unary
+            | Term
+  Term      = binaryop Term Term                       --binary
+            | Factor
+  Factor    = Primary "^" Factor                       --exponential
+            | Prefix 
+  Prefix    = ("#" | "~" | "_") Prefix                 --unary
+            | Primary
+  Primary   = numlit
+            | stringlit
+            | Primary "(" ListOf<Exp, ","> ")"         --call
+            | "[" ListOf<Exp, ","> "]"                 --array
+            | "{" ListOf<DictItem, ","> "}"            --dict
+            | id ("." | "?.") id                       --member
+            | id "[" Exp "]"                           --subscript        
+            | id
 
-  relop = "<=" | ">=" | "==" | "!=" | "<" | ">"
-  math_assign_op = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
-  binary_op = "+" | "-" | "*" | "/" | "%" | "^"
+  relop     = "<=" | ">=" | "==" | "!=" | "<" | ">"
+  assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
+  binaryop  = "+" | "-" | "*" | "/" | "%" | "^"
 
-  FuncCall = id "(" Params ")"
   PrintStmt = log "(" Exp ")"
 
-  IfStmt = "?" Exp Block "!" Block                  --with_else
-         | "?" Exp Block "!" IfStmt                 --nested_if
-         | "?" Exp Block                            --plain_if
+  IfStmt    = "?" Exp Block "!" Block                  --with_else
+            | "?" Exp Block "!" IfStmt                 --nested_if
+            | "?" Exp Block                            --plain_if
   
-  WhileStmt = "w" Exp Block
-  ForStmt = id in Exp "," Exp ("," Exp)? Block  --range
-          | id in Exp Block                     --direct
+  LoopStmt  = "w" Exp Block                            --while
+            | "*" "." digit+ Block                     --repeat
+            | id in Exp "," Exp ("," Exp)? Block       --range
+            | id in Exp Block                          --direct
 
-  RepeatStmt = "*" "." digit+ Block
-  TryStmt = try Block ExceptStmt
-  LoopTryStmt = try Block LoopExceptStmt
-  ExceptStmt = except "(" Params ")" Block
-  LoopExceptStmt = except "(" Params ")" Block
-           
-  ReturnStmt = return Exp
-  BreakStmt = break
-  ContinueStmt = continue
-  ThrowStmt = throw Exp
-  
-  Block = ":" Stmt* ";"
+  TryStmt   = try Block except Params Block  
 
-  log = "log" ~idchar
-  function = "f" ~idchar
-  in = "in" ~idchar
-  while = "w" ~idchar
-  try = "t" ~idchar
-  except = "e" ~idchar
-  break = "br" ~idchar
-  continue = "ct" ~idchar
-  throw = "th" ~idchar
-  return = "r" ~idchar
+  Block     = ":" Statement* ";"
 
-  id = ~keyword letter idchar*
-  idchar = alnum | "_"
+  log       = "log" ~idchar
+  function  = "f" ~idchar
+  in        = "in" ~idchar
+  while     = "w" ~idchar
+  try       = "t" ~idchar
+  except    = "e" ~idchar
+  break     = "br" ~idchar
+  continue  = "ct" ~idchar
+  throw     = "th" ~idchar
+  return    = "r" ~idchar
 
-  keyword = log | function | in | while | throw |  try | except | break | continue | return
+  id        = ~keyword letter idchar*
+  idchar    = alnum | "_"
 
-  numlit = digit+ ("." digit+)? (("e" | "E") ("+" | "-")? digit+)?
+  keyword   = log | function | in | while | throw 
+            |  try | except | break | continue | return
+
+  numlit    = digit+ ("." digit+)? (("e" | "E") ("+" | "-")? digit+)?
   
   stringlit = "'" (~"'" validchar)* "'"
   validchar = "\\'" | "\\n" | "\\\\" | any
 
-  DictItem = id ":" Exp
+  DictItem  = id ":" Exp
   space    += "//" (~"\n" any)* --comment
 }

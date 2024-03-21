@@ -4,11 +4,18 @@ export class Program {
   }
 }
 
-export class Assignment {
-  constructor(target, source) {
-    Object.assign(this, { target, source });
+export class VariableDeclaration {
+  constructor(variable, value) {
+    Object.assign(this, { variable, value });
   }
 }
+
+export class Variable {
+  constructor(name) {
+    Object.assign(this, { name });
+  }
+}
+
 
 export class PrintStmt {
   constructor(argument) {
@@ -22,6 +29,12 @@ export class IfStmt {
   }
 }
 
+export class ShortIfStmt {
+  constructor(test, consequent) {
+    Object.assign(this, { test, consequent });
+  }
+}
+
 export class WhileStmt {
   constructor(test, body) {
     Object.assign(this, { test, body });
@@ -29,14 +42,8 @@ export class WhileStmt {
 }
 
 export class TryStmt {
-  constructor(body, except) {
-    Object.assign(this, { body, except });
-  }
-}
-
-export class ExceptStmt {
-  constructor(params, body) {
-    Object.assign(this, { params, body });
+  constructor(body, exceptParams, exceptBody) {
+    Object.assign(this, { body, exceptParams, exceptBody });
   }
 }
 
@@ -54,10 +61,15 @@ export class ThrowStmt {
   }
 }
 
-export class ForStmt {
+export class RepeatStmt {
+  constructor(count, body) {
+    Object.assign(this, { count, body });
+  }
+}
+
+export class ForRangeStmt {
   constructor(variable, expression1, expression2, step = 1, body) {
     this.variable = variable; // The loop variable
-    this.loopType = expression2 ? 'range' : 'direct'; // Determine loop type based on the presence of expression2
     this.expression1 = expression1; // Start expression for range or the expression for direct
     this.expression2 = expression2 || null; // End expression for range, null for direct
     this.step = step; // Step for range, null if not provided
@@ -65,21 +77,16 @@ export class ForStmt {
   }
 }
 
-export class RepeatStmt {
-  constructor(count, body) {
-    Object.assign(this, { count, body });
+export class ForStmt {
+  constructor(iterator, collection, body) {
+    Object.assign(this, { iterator, collection, body });
   }
+
 }
 
 export class Block {
   constructor(statements) {
     this.statements = statements;
-  }
-}
-
-export class Variable {
-  constructor(name) {
-    Object.assign(this, { name });
   }
 }
 
@@ -89,9 +96,21 @@ export class IntrinsicFunction {
   }
 }
 
-export class Function {
-  constructor(name, parameters, body) {
-    Object.assign(this, { name, parameters, body });
+export class FunctionDeclaration {
+  constructor(func, params, body) {
+    Object.assign(this, { func, params, body });
+  }
+}
+
+export class Func {
+  constructor(name) {
+    Object.assign(this, { name });
+  }
+}
+
+export class Param {
+  constructor(name) {
+    Object.assign(this, { name });
   }
 }
 
@@ -168,8 +187,37 @@ export class ReturnStmt {
   }
 }
 
+export class ShortReturnStatement {
+  constructor() { }
+}
+
 export class String {
   constructor(value) {
     this.value = value;
   }
 }
+
+export const boolType = { kind: "BoolType" };
+export const intType = { kind: "IntType" };
+export const floatType = { kind: "FloatType" };
+export const stringType = { kind: "StringType" };
+export const voidType = { kind: "VoidType" };
+export const anyType = { kind: "AnyType" };
+
+export const standardLibrary = Object.freeze({
+  int: intType,
+  float: floatType,
+  boolean: boolType,
+  string: stringType,
+  void: voidType,
+  any: anyType,
+  π: new Variable("π", true),
+  print: new Function("print"),
+  sin: new Function("sin"),
+  cos: new Function("cos"),
+  exp: new Function("exp"),
+  ln: new Function("ln"),
+  hypot: new Function("hypot"),
+  bytes: new Function("bytes"),
+  codepoints: new Function("codepoints")
+});

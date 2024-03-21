@@ -1,5 +1,12 @@
 import * as core from './core.js';
 
+const INT = core.intType;
+const FLOAT = core.floatType;
+const STRING = core.stringType;
+const BOOLEAN = core.boolType;
+const ANY = core.anyType;
+const VOID = core.voidType;
+
 class Context {
   // Like most statically-scoped languages, Carlos contexts will contain a
   // map for their locally declared identifiers and a reference to the parent
@@ -25,77 +32,163 @@ class Context {
 }
 
 export default function analyze(match) {
+  let context = Context.root();
 
-  const analyzer = match.matcher.grammar
+  function must(condition, message, errorLocation) {
+    if (!condition) {
+      const prefix = errorLocation.at.source.getLineAndColumnMessage();
+      throw new Error(`${prefix}${message}`);
+    }
+  }
+
+  function mustNotAlreadyBeDeclared(name, at) {
+    must(!context.lookup(name), `Identifier ${name} already declared`, at);
+  }
+
+  function mustBeInLoop(at) {
+    must(context.inLoop, "Break can only appear in a loop", at);
+  }
+
+  function mustBeInAFunction(at) {
+    must(context.function, "Return can only appear in a function", at);
+  }
+
+  function mustBeCallable(e, at) {
+    const callable = e?.kind === "StructType" || e.type?.kind === "FunctionType";
+    must(callable, "Call of non-function or non-constructor", at);
+  }
+
+  function mustHaveCorrectArgumentCount(argCount, paramCount, at) {
+    const message = `${paramCount} argument(s) required but ${argCount} passed`;
+    must(argCount === paramCount, message, at);
+  }
+
+  const builder = match.matcher.grammar
     .createSemantics()
     .addOperation('rep', {
       Program(statements) {
         return new core.Program(statements.children.map(s => s.rep()));
       },
-      Assignment(id, _eq, expression) {
-        return new core.Assignment(id.sourceString, expression.rep());
+      VarDecl(id, _eq, expression) {
+        const value = expression.rep();
+        const variable = new core.Variable(id.sourceString);
+        mustNotAlreadyBeDeclared(id.sourceString, { at: id });
+        context.add(id.sourceString, variable);
+        return new core.VariableDeclaration(variable, value);
       },
       PrintStmt(_log, _open, exp, _close) {
         return new core.PrintStmt(exp.rep());
       },
-      Function(_f, id, _open, params, _close, _arrow, statements, _semi) {
-        return new core.Function(id.sourceString, params.rep(), statements.children.map(s => s.rep()));
+      FuncDecl(_f, id, parameters, _arrow, statements, _semi) {
+        const func = new core.Func(id.sourceString);
+        mustNotAlreadyBeDeclared(id.sourceString, { at: id });
+        context.add(id.sourceString, func);
+
+        context = context.newChildContext({ inLoop: false, function: func });
+        const params = parameters.rep();
+        const body = statements.children.map(s => s.rep());
+
+        context = context.parent;
+        return new core.FunctionDeclaration(func, params, body);
       },
-      FuncCall(id, _open, params, _close) {
-        return new core.FuncCall(id.sourceString, params.rep());
+      Params(_open, params, _close) {
+        return params.asIteration().children.map(p => p.rep());
       },
-      IfStmt_with_else(_q, condition, b1, _e, _b2) {
-        return new core.IfStmt(condition.rep(), b1.rep(), b2.rep());
-      },
-      IfStmt_nested_if(_q, condition, b1, _e, b2) {
-        return new core.IfStmt(condition.rep(), b1.rep(), b2.rep());
-      },
-      IfStmt_plain_if(_q, condition, b1) {
-        return new core.IfStmt(condition.rep(), b1.rep());
+      Param(id) {
+        const param = new core.Variable(id.sourceString);
+        mustNotAlreadyBeDeclared(param.name, { at: id });
+        context.add(param.name, param);
+        return param;
       },
       IfStmt_with_else(_q, condition, b1, _e, b2) {
-        return new core.IfStmt(condition.rep(), b1.rep(), b2.rep());
+        const test = condition.rep();
+        context = context.newChildContext();
+        const consequent = b1.rep();
+        context = context.parent;
+        context = context.newChildContext();
+        const alternate = b2.rep();
+        context = context.parent;
+        return new core.IfStmt(test, consequent, alternate);
       },
-      ForStmt_range(id, _in, start, _comma, end, _step, step, block) {
-        let stepValue = step.children.length > 0 ? step.rep() : 1;
-        return new core.ForStmt(id.sourceString, start.rep(), end.rep(), stepValue, block.rep());
+      IfStmt_nested_if(_q, condition, b1, _e, b2) {
+        const test = condition.rep();
+        context = context.newChildContext();
+        const consequent = b1.rep();
+        const alternate = b2.rep();
+        return new core.IfStmt(test, consequent, alternate);
       },
-      ForStmt_direct(id, _in, exp, block) {
-        return new core.ForStmt(id.sourceString, exp.rep(), null, null, block.rep());
+      IfStmt_plain_if(_q, condition, b1) {
+        const test = condition.rep();
+        context = context.newChildContext();
+        const consequent = b1.rep();
+        context = context.parent;
+        return new core.ShortIfStmt(test, consequent);
       },
-      WhileStmt(_while, exp, block) {
-        return new core.WhileStmt(exp.rep(), block.rep());
+      LoopStmt_while(_while, exp, block) {
+        const test = exp.rep();
+        context = context.newChildContext({ inLoop: true });
+        const body = block.rep();
+        context = context.parent;
+        return new core.WhileStmt(test, body);
       },
-      TryStmt(_try, block, except) {
-        return new core.TryStmt(block.rep(), except.rep());
-      },
-      LoopTryStmt(_try, block, except) {
-        return new core.TryStmt(block.rep(), except.rep());
-      },
-      ExceptStmt(_except, _left, params, _right, block) {
-        return new core.ExceptStmt(params.rep(), block.rep());
-      },
-      LoopExceptStmt(_except, _left, params, _right, block) {
-        return new core.ExceptStmt(params.rep(), block.rep());
-      },
-      RepeatStmt(_star, _dot, count, block) {
+      LoopStmt_repeat(_star, _dot, count, block) {
         const repeatCount = parseInt(count.children.map(c => c.sourceString).join(''), 10);
         return new core.RepeatStmt(repeatCount, block.rep());
       },
-      Block(_open, statements, _close) {
-        return new core.Block(statements.children.map(s => s.rep()));
+      LoopStmt_range(id, _in, exp1, _comma, exp2, _comma2, step, block) {
+        const [start, end] = [exp1.rep(), exp2.rep()];
+
+        const iterator = new core.Variable(id.sourceString);
+        context = context.newChildContext({ inLoop: true });
+        context.add(id.sourceString, iterator);
+
+        const body = block.rep();
+        const stepValue = step.children.length === 0 ? null : step.rep();
+
+        context = context.parent;
+        return new core.ForRangeStmt(iterator, start, end, stepValue, body);
       },
-      BreakStmt(_break) {
+      LoopStmt_direct(id, _in, exp, block) {
+        const collection = exp.rep();
+        const iterator = new core.Variable(id.sourceString);
+        context = context.newChildContext({ inLoop: true });
+        context.add(iterator.name, iterator);
+        const body = block.rep();
+        context = context.parent;
+        return new core.ForStmt(iterator, collection, body);
+      },
+      Block(_open, statements, _close) {
+        return statements.children.map(s => s.rep());
+      },
+      Statement_break(breakKeyword) {
+        mustBeInLoop({ at: breakKeyword });
         return new core.BreakStmt();
       },
-      ContinueStmt(_continue) {
+      Statement_continue(continueKeyword) {
+        mustBeInLoop({ at: continueKeyword });
         return new core.ContinueStmt();
       },
-      ThrowStmt(_throw, exp) {
+      TryStmt(_try, block, _except, params, exceptBlock) {
+        context = context.newChildContext();
+        const body = block.rep();
+        context = context.parent;
+        const exceptParams = params.rep();
+        context = context.newChildContext();
+        const exceptBody = exceptBlock.rep();
+        context = context.parent;
+        return new core.TryStmt(body, exceptParams, exceptBody);
+      },
+      Statement_throw(_throw, exp) {
         return new core.ThrowStmt(exp.rep());
       },
-      ReturnStmt(_return, exp) {
-        return new core.ReturnStmt(exp.rep());
+      Statement_return(returnKeyword, exp) {
+        mustBeInAFunction({ at: returnKeyword });
+        const returnExpression = exp.rep();
+        return new core.ReturnStmt(returnExpression);
+      },
+      Statement_shortreturn(returnKeyword) {
+        mustBeInAFunction({ at: returnKeyword });
+        return new core.ShortReturnStatement();
       },
       Exp_conditional(consequent, _q, test, _e, alternate) {
         return new core.ConditionalExpression(test.rep(), consequent.rep(), alternate.rep());
@@ -118,6 +211,9 @@ export default function analyze(match) {
       Postfix_unary(exp, op) {
         return new core.UnaryExpression(op.sourceString, exp.rep());
       },
+      Primary_call(id, _open, args, _close) {
+        return new core.FuncCall(id.sourceString, args.rep());
+      },
       Primary_array(_open, elements, _close) {
         return new core.ArrayExpression(elements.rep());
       },
@@ -127,10 +223,10 @@ export default function analyze(match) {
       DictItem(id, _colon, exp) {
         return new core.DictItem(id.sourceString, exp.rep());
       },
-      Primary_get_object_dot(id, _dot, prop) {
+      Primary_member(id, _dot, prop) {
         return new core.AccessExpression(id.sourceString, prop.sourceString);
       },
-      Primary_get_bracket(id, _open, index, _close) {
+      Primary_subscript(id, _open, index, _close) {
         return new core.AccessExpression(id.sourceString, index.rep());
       },
       Term_binary(op, left, right) {
@@ -150,5 +246,5 @@ export default function analyze(match) {
       }
     });
 
-  return analyzer(match).rep();
+  return builder(match).rep();
 };
