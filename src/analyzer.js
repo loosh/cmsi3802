@@ -1,4 +1,5 @@
 import * as core from './core.js';
+import util from 'util';
 
 const INT = core.intType;
 const FLOAT = core.floatType;
@@ -42,6 +43,9 @@ export default function analyze(match) {
   }
 
   function mustNotAlreadyBeDeclared(name, at) {
+    console.log(
+      `Looking for ${name} in ${util.inspect(context, { depth: 15 })}`
+    );
     must(!context.lookup(name), `Identifier ${name} already declared`, at);
   }
 
@@ -115,6 +119,7 @@ export default function analyze(match) {
         context = context.newChildContext();
         const consequent = b1.rep();
         const alternate = b2.rep();
+        context = context.parent;
         return new core.IfStmt(test, consequent, alternate);
       },
       IfStmt_plain_if(_q, condition, b1) {
