@@ -1,13 +1,6 @@
 import * as core from './core.js';
 import util from 'util';
 
-const INT = core.intType;
-const FLOAT = core.floatType;
-const STRING = core.stringType;
-const BOOLEAN = core.boolType;
-const ANY = core.anyType;
-const VOID = core.voidType;
-
 class Context {
   // Like most statically-scoped languages, Carlos contexts will contain a
   // map for their locally declared identifiers and a reference to the parent
@@ -43,10 +36,17 @@ export default function analyze(match) {
   }
 
   function mustNotAlreadyBeDeclared(name, at) {
+    // console.log(
+    //   `Looking for ${name} in ${util.inspect(context, { depth: 15 })}`
+    // );
+    must(!context.lookup(name), `Identifier ${name} already declared`, at);
+  }
+
+  function mustHaveBeenFound(entity, name, at) {
     console.log(
       `Looking for ${name} in ${util.inspect(context, { depth: 15 })}`
     );
-    must(!context.lookup(name), `Identifier ${name} already declared`, at);
+    must(entity, `Identifier ${name} not declared`, at);
   }
 
   function mustBeInLoop(at) {
@@ -55,11 +55,6 @@ export default function analyze(match) {
 
   function mustBeInAFunction(at) {
     must(context.function, "Return can only appear in a function", at);
-  }
-
-  function mustBeCallable(e, at) {
-    const callable = e?.kind === "StructType" || e.type?.kind === "FunctionType";
-    must(callable, "Call of non-function or non-constructor", at);
   }
 
   function mustHaveCorrectArgumentCount(argCount, paramCount, at) {
@@ -90,6 +85,7 @@ export default function analyze(match) {
 
         context = context.newChildContext({ inLoop: false, function: func });
         const params = parameters.rep();
+        func.paramCount = params.length;
         const body = statements.children.map(s => s.rep());
 
         context = context.parent;
@@ -216,8 +212,14 @@ export default function analyze(match) {
       Postfix_unary(exp, op) {
         return new core.UnaryExpression(op.sourceString, exp.rep());
       },
-      Primary_call(id, _open, args, _close) {
-        return new core.FuncCall(id.sourceString, args.rep());
+      Primary_call(exp, open, args, _close) {
+        const exps = args.asIteration().children;
+        const callee = exp.rep();
+
+        const targetParamCount = context.lookup(callee.name).paramCount;
+
+        mustHaveCorrectArgumentCount(exps.length, targetParamCount, { at: open });
+        return new core.FuncCall(callee, args.rep());
       },
       Primary_array(_open, elements, _close) {
         return new core.ArrayExpression(elements.rep());
@@ -228,11 +230,14 @@ export default function analyze(match) {
       DictItem(id, _colon, exp) {
         return new core.DictItem(id.sourceString, exp.rep());
       },
-      Primary_member(id, _dot, prop) {
-        return new core.AccessExpression(id.sourceString, prop.sourceString);
+      Primary_member(exp, dot, id) {
+        const object = exp.rep();
+        const jsonObject = context.lookup(object.name);
+        return new core.MemberExpression(object, dot.sourceString, id.sourceString);
       },
-      Primary_subscript(id, _open, index, _close) {
-        return new core.AccessExpression(id.sourceString, index.rep());
+      Primary_subscript(exp1, _open, exp2, _close) {
+        const [array, index] = [exp1.rep(), exp2.rep()];
+        return new core.Subscript(array, index);
       },
       Term_binary(op, left, right) {
         return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
@@ -243,8 +248,10 @@ export default function analyze(match) {
       stringlit(_left, chars, _right) {
         return new core.String(chars.children.map(c => c.sourceString).join(''));
       },
-      id(_letter, _id) {
-        return new core.Variable(this.sourceString);
+      Primary_id(id) {
+        const entity = context.lookup(id.sourceString);
+        mustHaveBeenFound(entity, id.sourceString, { at: id });
+        return entity;
       },
       NonemptyListOf(first, _, rest) {
         return [first.rep(), ...rest.children.map(c => c.rep())];

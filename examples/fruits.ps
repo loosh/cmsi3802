@@ -1,5 +1,8 @@
 fruits = ['apple', 'banana', 'cherry']
-obj = {name:'John', favfruitindex: 0}
+obj = {name:'John', favfruitindex: 0, address: {
+  street: '123 Main St',
+  city: 'Anytown'
+}}
 
 ?#fruits > 2:
   log('There are more than 2 fruits');
@@ -13,10 +16,13 @@ fruit in fruits:
     br; 
   log(fruit);
 
+i = 1
+
 w i < 5:
-  ?fruit=='orange':
+  ?fruits[i]=='orange':
     ct;
-  log(fruit);
+  i++
+  log(fruits[i]);
 
 i in 1,5:
   log(i);

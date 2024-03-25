@@ -103,8 +103,8 @@ export class FunctionDeclaration {
 }
 
 export class Func {
-  constructor(name) {
-    Object.assign(this, { name });
+  constructor(name, paramCount) {
+    Object.assign(this, { name, paramCount });
   }
 }
 
@@ -120,9 +120,15 @@ export class FuncCall {
   }
 }
 
-export class AccessExpression {
-  constructor(id, index) {
-    Object.assign(this, { id, index });
+export class MemberExpression {
+  constructor(object, chain, id) {
+    Object.assign(this, { object, chain, id });
+  }
+}
+
+export class Subscript {
+  constructor(array, index) {
+    Object.assign(this, { array, index });
   }
 }
 
@@ -205,12 +211,6 @@ export const voidType = { kind: "VoidType" };
 export const anyType = { kind: "AnyType" };
 
 export const standardLibrary = Object.freeze({
-  int: intType,
-  float: floatType,
-  boolean: boolType,
-  string: stringType,
-  void: voidType,
-  any: anyType,
   π: new Variable("π", true),
   print: new Function("print"),
   sin: new Function("sin"),
@@ -219,5 +219,4 @@ export const standardLibrary = Object.freeze({
   ln: new Function("ln"),
   hypot: new Function("hypot"),
   bytes: new Function("bytes"),
-  codepoints: new Function("codepoints")
 });

@@ -42,9 +42,9 @@ Pythscrip {
             | Primary "(" ListOf<Exp, ","> ")"         --call
             | "[" ListOf<Exp, ","> "]"                 --array
             | "{" ListOf<DictItem, ","> "}"            --dict
-            | id ("." | "?.") id                       --member
-            | id "[" Exp "]"                           --subscript        
-            | id
+            | Primary ("." | "?.") id                  --member
+            | Primary "[" Exp "]"                      --subscript        
+            | id                                       --id              
 
   relop     = "<=" | ">=" | "==" | "!=" | "<" | ">"
   assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
