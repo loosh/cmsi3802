@@ -181,12 +181,6 @@ export class UnaryExpression {
   }
 }
 
-export class Number {
-  constructor(value) {
-    this.value = value;
-  }
-}
-
 export class ReturnStmt {
   constructor(source) {
     this.source = source;
@@ -196,19 +190,6 @@ export class ReturnStmt {
 export class ShortReturnStatement {
   constructor() { }
 }
-
-export class String {
-  constructor(value) {
-    this.value = value;
-  }
-}
-
-export const boolType = { kind: "BoolType" };
-export const intType = { kind: "IntType" };
-export const floatType = { kind: "FloatType" };
-export const stringType = { kind: "StringType" };
-export const voidType = { kind: "VoidType" };
-export const anyType = { kind: "AnyType" };
 
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),

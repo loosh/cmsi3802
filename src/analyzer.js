@@ -2,12 +2,6 @@ import * as core from './core.js';
 import util from 'util';
 
 class Context {
-  // Like most statically-scoped languages, Carlos contexts will contain a
-  // map for their locally declared identifiers and a reference to the parent
-  // context. The parent of the global context is null. In addition, the
-  // context records whether analysis is current within a loop (so we can
-  // properly check break statements), and reference to the current function
-  // (so we can properly check return statements).
   constructor({ parent = null, locals = new Map(), inLoop = false, function: f = null }) {
     Object.assign(this, { parent, locals, inLoop, function: f });
   }
@@ -43,9 +37,6 @@ export default function analyze(match) {
   }
 
   function mustHaveBeenFound(entity, name, at) {
-    console.log(
-      `Looking for ${name} in ${util.inspect(context, { depth: 15 })}`
-    );
     must(entity, `Identifier ${name} not declared`, at);
   }
 
@@ -232,7 +223,6 @@ export default function analyze(match) {
       },
       Primary_member(exp, dot, id) {
         const object = exp.rep();
-        const jsonObject = context.lookup(object.name);
         return new core.MemberExpression(object, dot.sourceString, id.sourceString);
       },
       Primary_subscript(exp1, _open, exp2, _close) {
@@ -243,10 +233,10 @@ export default function analyze(match) {
         return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
       },
       numlit(_main, _dot, _frac, _exp, _sign, _num) {
-        return new core.Number(this.sourceString);
+        return Number(this.sourceString);
       },
-      stringlit(_left, chars, _right) {
-        return new core.String(chars.children.map(c => c.sourceString).join(''));
+      stringlit(_left, _chars, _right) {
+        return this.sourceString;
       },
       Primary_id(id) {
         const entity = context.lookup(id.sourceString);

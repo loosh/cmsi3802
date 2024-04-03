@@ -1,5 +1,5 @@
 fruits = ['apple', 'banana', 'cherry']
-obj = {name:'John', favfruitindex: 0, address: {
+person = {name:'John', favfruitindex: 0, address: {
   street: '123 Main St',
   city: 'Anytown'
 }}
@@ -35,7 +35,8 @@ x=0
 w x < #fruits:
   log(fruits[x])
   log(fruits[10])
-  log(obj.name)
-  log(fruits[obj.favfruitindex])
-  log(obj['name'])
+  log(person.name)
+  log(person.address.street)
+  log(fruits[person.favfruitindex])
+  log(person['name'])
 ;
