@@ -20,6 +20,18 @@ Pythscrip is a "mini"-golfing language that incorporates syntax and features fro
 - Efficient for/while loops
 - Shortcuts for tedious tasks
 
+---
+## Static Errors and Checks
+- No error on redeclaring a variable
+- Two functions cannot be declared with the same name
+- Parameter identifiers must be unique from already declared variables
+- Break and continue statements can only appear in loops
+- Return statements can only appear in functions
+- Throw statements can appear anywhere
+- All math checks are handled by the generated JavaScript and thus errors will be thrown at runtime
+- Object member expressions and array subscripts are handled by the generated JavaScript
+---
+
 ## Functionality
 
 ### Printing
