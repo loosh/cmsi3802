@@ -1,7 +1,12 @@
 f gcd(a,b)=>?a==b:r a;!?a>b:r gcd(-a b,b);!:r gcd(a,b);;
 
+x = 5
+
 f gcd2(a,b) =>
   ?a==b: r a;
   !?a>b: r gcd2(-a b,b);
-  !: r gcd2(a,b);
+  !: 
+  log(x)
+  r gcd2(a,b)
+  ;
   ;

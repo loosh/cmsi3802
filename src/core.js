@@ -181,11 +181,11 @@ export class ShortReturnStatement {
 
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),
-  print: new Function("print"),
-  sin: new Function("sin"),
-  cos: new Function("cos"),
-  exp: new Function("exp"),
-  ln: new Function("ln"),
-  hypot: new Function("hypot"),
-  bytes: new Function("bytes"),
+  log: new Func("log"),
+  sin: new Func("sin"),
+  cos: new Func("cos"),
+  exp: new Func("exp"),
+  ln: new Func("ln"),
+  hypot: new Func("hypot"),
+  bytes: new Func("bytes"),
 });
