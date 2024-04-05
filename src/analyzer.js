@@ -62,7 +62,6 @@ export default function analyze(match) {
       VarDecl(id, _eq, expression) {
         const value = expression.rep();
         const variable = new core.Variable(id.sourceString);
-        mustNotAlreadyBeDeclared(id.sourceString, { at: id });
         context.add(id.sourceString, variable);
         return new core.VariableDeclaration(variable, value);
       },
@@ -185,17 +184,27 @@ export default function analyze(match) {
       Exp_conditional(consequent, _q, test, _e, alternate) {
         return new core.ConditionalExpression(test.rep(), consequent.rep(), alternate.rep());
       },
-      Exp1_or(left, _or, right) {
-        return new core.LogicalExpression('or', left.rep(), right.rep());
+      Exp1_or(exp, _or, exps) {
+        let left = exp.rep();
+        for (let e of exps.children) {
+          let right = e.rep();
+          left = new core.BinaryExpression('|', left, right);
+        }
+        return left;
       },
-      Exp1_and(left, _and, right) {
-        return new core.LogicalExpression('and', left.rep(), right.rep());
+      Exp1_and(exp, _or, exps) {
+        let left = exp.rep();
+        for (let e of exps.children) {
+          let right = e.rep();
+          left = new core.BinaryExpression('&', left, right);
+        }
+        return left;
       },
       Exp2_relational(left, op, right) {
-        return new core.RelationalExpression(op.sourceString, left.rep(), right.rep());
+        return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
       },
       Exp3_math_assign(left, op, right) {
-        return new core.MathAssignmentExpression(op.sourceString, left.rep(), right.rep());
+        return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
       },
       Prefix_unary(op, exp) {
         return new core.UnaryExpression(op.sourceString, exp.rep());
@@ -229,7 +238,10 @@ export default function analyze(match) {
         const [array, index] = [exp1.rep(), exp2.rep()];
         return new core.Subscript(array, index);
       },
-      Term_binary(op, left, right) {
+      Term_math(op, left, right) {
+        return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
+      },
+      Factor_exponential(left, op, right) {
         return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
       },
       numlit(_main, _dot, _frac, _exp, _sign, _num) {

@@ -22,8 +22,8 @@ Pythscrip {
 
   Exp       = Exp1 "?" Exp1 "!" Exp                    --conditional
             | Exp1
-  Exp1      = Exp1 ("|" Exp2)*                         --or
-            | Exp1 ("&" Exp2)*                         --and
+  Exp1      = Exp1 ("|" Exp2)+                         --or
+            | Exp1 ("&" Exp2)+                         --and
             | Exp2
   Exp2      = Exp2 relop Exp3                          --relational
             | Exp3
@@ -31,14 +31,13 @@ Pythscrip {
             | Postfix
   Postfix   = Postfix ("++" | "--" | "F")              --unary
             | Term
-  Term      = binaryop Term Term                       --binary
+  Term      = binaryop Term Term                       --math
             | Factor
   Factor    = Primary "^" Factor                       --exponential
             | Prefix 
   Prefix    = ("#" | "~" | "_") Prefix                 --unary
             | Primary
-  Primary   = PipeStmt
-            | numlit
+  Primary   = numlit
             | stringlit
             | Primary "(" ListOf<Exp, ","> ")"         --call
             | "[" ListOf<Exp, ","> "]"                 --array
@@ -49,7 +48,7 @@ Pythscrip {
 
   relop     = "<=" | ">=" | "==" | "!=" | "<" | ">"
   assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
-  binaryop  = "+" | "-" | "*" | "/" | "%" | "^"
+  binaryop  = "+" | "-" | "*" | "/" | "%"
 
   PrintStmt = log "(" Exp ")"
 

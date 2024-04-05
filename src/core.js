@@ -138,18 +138,6 @@ export class ConditionalExpression {
   }
 }
 
-export class RelationalExpression {
-  constructor(op, left, right) {
-    Object.assign(this, { op, left, right });
-  }
-}
-
-export class LogicalExpression {
-  constructor(op, left, right) {
-    Object.assign(this, { op, left, right });
-  }
-}
-
 export class ArrayExpression {
   constructor(elements) {
     this.elements = elements;
