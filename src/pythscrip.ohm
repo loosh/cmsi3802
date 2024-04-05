@@ -37,10 +37,10 @@ Pythscrip {
             | Prefix 
   Prefix    = ("#" | "~" | "_") Prefix                 --unary
             | Primary
-  Primary   = numlit
+  Primary   = PipeStmt
+            | numlit
             | stringlit
             | Primary "(" ListOf<Exp, ","> ")"         --call
-            | PipeStmt                                 --pipe
             | "[" ListOf<Exp, ","> "]"                 --array
             | "{" ListOf<DictItem, ","> "}"            --dict
             | Primary ("." | "?.") id                  --member
