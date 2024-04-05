@@ -40,6 +40,7 @@ Pythscrip {
   Primary   = numlit
             | stringlit
             | Primary "(" ListOf<Exp, ","> ")"         --call
+            | PipeStmt                                 --pipe
             | "[" ListOf<Exp, ","> "]"                 --array
             | "{" ListOf<DictItem, ","> "}"            --dict
             | Primary ("." | "?.") id                  --member
@@ -62,6 +63,8 @@ Pythscrip {
             | id in Exp Block                          --direct
 
   TryStmt   = try Block except Params Block  
+
+  PipeStmt  = Primary ("|>" (Primary | log))+
 
   Block     = ":" Statement* ";"
 
