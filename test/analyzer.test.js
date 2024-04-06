@@ -34,21 +34,7 @@ const semanticChecks = [
   ["subscript using member exp", "x={y: 1} a=[1,2] log(a[x.y])"],
   ["array of struct", "x=[{}, {}]"],
   ["assigned functions", "f test() => ; g = test g = test"],
-  // ["call of assigned functions", "f test(x) => ; g=test g(1)"],
-  // [
-  //   "call of assigned function in expression",
-  //   `function test(x, y) => ;
-  //   g = f
-  //   log(g(1, true))
-  //   `
-  // ],
-  // [
-  //   "pass a function to a function",
-  //   `f t(x, y) => r 1;
-  //    f g() => ;
-  //    t(2, g)`,
-  // ],
-  // ["function assign", "f t() => ; g = f h = [g, f] log(h[0]())"],
+  ["call of assigned functions", "f test(x) => ; g=test g(1)"],
   ["outer variable", "x=1 w false: log(x);"],
   ["built-in constants", "log(* 25.0 π)"],
   ["built-in sin", "log(sin(π))"],

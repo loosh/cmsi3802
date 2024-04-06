@@ -11,8 +11,8 @@ export class VariableDeclaration {
 }
 
 export class Variable {
-  constructor(name) {
-    Object.assign(this, { name });
+  constructor(name, type) {
+    Object.assign(this, { name, type });
   }
 }
 

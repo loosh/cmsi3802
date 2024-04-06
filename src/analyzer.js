@@ -60,10 +60,10 @@ export default function analyze(match) {
         return new core.Program(statements.children.map(s => s.rep()));
       },
       VarDecl(id, _eq, expression) {
-        const value = expression.rep();
-        const variable = new core.Variable(id.sourceString);
+        const intializer = expression.rep();
+        const variable = new core.Variable(id.sourceString, intializer.type);
         context.add(id.sourceString, variable);
-        return new core.VariableDeclaration(variable, value);
+        return new core.VariableDeclaration(variable, intializer);
       },
       PrintStmt(_log, _open, exp, _close) {
         return new core.PrintStmt(exp.rep());
