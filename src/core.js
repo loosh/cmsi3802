@@ -120,6 +120,12 @@ export class FuncCall {
   }
 }
 
+export class Assignment {
+  constructor(target, source) {
+    Object.assign(this, { target, source });
+  }
+}
+
 export class MemberExpression {
   constructor(object, chain, id) {
     Object.assign(this, { object, chain, id });
@@ -181,11 +187,10 @@ export class ShortReturnStatement {
 
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),
-  log: new Func("log"),
-  sin: new Func("sin"),
-  cos: new Func("cos"),
-  exp: new Func("exp"),
-  ln: new Func("ln"),
-  hypot: new Func("hypot"),
-  bytes: new Func("bytes"),
+  log: new Func("log", 1),
+  sin: new Func("sin", 1),
+  cos: new Func("cos", 1),
+  exp: new Func("exp", 1),
+  ln: new Func("ln", 1),
+  hypot: new Func("hypot", 2),
 });

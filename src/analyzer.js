@@ -151,6 +151,11 @@ export default function analyze(match) {
       Block(_open, statements, _close) {
         return statements.children.map(s => s.rep());
       },
+      Statement_assign(variable, _eq, expression) {
+        const source = expression.rep();
+        const target = variable.rep();
+        return new core.Assignment(target, source);
+      },
       Statement_break(breakKeyword) {
         mustBeInLoop({ at: breakKeyword });
         return new core.BreakStmt();
@@ -216,9 +221,13 @@ export default function analyze(match) {
         const exps = args.asIteration().children;
         const callee = exp.rep();
 
-        const targetParamCount = context.lookup(callee.name).paramCount;
+        const target = context.lookup(callee.name);
 
+        must(target instanceof core.Func, `${callee.name} is not a function`, { at: open });
+
+        const targetParamCount = target.paramCount;
         mustHaveCorrectArgumentCount(exps.length, targetParamCount, { at: open });
+
         return new core.FuncCall(callee, args.rep());
       },
       Primary_array(_open, elements, _close) {
@@ -244,6 +253,13 @@ export default function analyze(match) {
       Factor_exponential(left, op, right) {
         return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
       },
+      true(_) {
+        return true;
+      },
+
+      false(_) {
+        return false;
+      },
       numlit(_main, _dot, _frac, _exp, _sign, _num) {
         return Number(this.sourceString);
       },
@@ -254,6 +270,9 @@ export default function analyze(match) {
         const entity = context.lookup(id.sourceString);
         mustHaveBeenFound(entity, id.sourceString, { at: id });
         return entity;
+      },
+      EmptyListOf() {
+        return [];
       },
       NonemptyListOf(first, _, rest) {
         return [first.rep(), ...rest.children.map(c => c.rep())];

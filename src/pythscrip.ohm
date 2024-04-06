@@ -6,6 +6,7 @@ Pythscrip {
             | LoopStmt
             | Primary_call
             | VarDecl
+            | Primary "=" Exp                         --assign
             | Exp
             | TryStmt
             | throw Exp                                --throw
@@ -37,7 +38,9 @@ Pythscrip {
             | Prefix 
   Prefix    = ("#" | "~" | "_") Prefix                 --unary
             | Primary
-  Primary   = numlit
+  Primary   = true 
+            | false
+            | numlit
             | stringlit
             | Primary "(" ListOf<Exp, ","> ")"         --call
             | "[" ListOf<Exp, ","> "]"                 --array
@@ -46,7 +49,7 @@ Pythscrip {
             | Primary "[" Exp "]"                      --subscript        
             | id                                       --id              
 
-  relop     = "<=" | ">=" | "==" | "!=" | "<" | ">"
+  relop     = "<=" | ">=" | "==" | "~=" | "<" | ">"
   assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
   binaryop  = "+" | "-" | "*" | "/" | "%"
 
@@ -67,6 +70,8 @@ Pythscrip {
 
   Block     = ":" Statement* ";"
 
+  true        = "true" ~idchar
+  false       = "false" ~idchar
   log       = "log" ~idchar
   function  = "f" ~idchar
   in        = "in" ~idchar
