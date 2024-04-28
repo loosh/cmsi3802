@@ -4,8 +4,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 
 const examples = [
   {
-    pythscrip: `log('Hello World')`,
-    javascript: `console.log("Hello World")`
+    pythscrip: `log('Hello world, from Pythscrip!')`,
+    javascript: `console.log("Hello world")`
   },
   {
     pythscrip: `f addFive(x) => r + x * 5 _2;`,
