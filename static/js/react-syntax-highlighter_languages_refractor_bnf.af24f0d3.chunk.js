@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[1126],{3605:n=>{function e(n){n.languages.bnf={string:{pattern:/"[^\r\n"]*"|'[^\r\n']*'/},definition:{pattern:/<[^<>\r\n\t]+>(?=\s*::=)/,alias:["rule","keyword"],inside:{punctuation:/^<|>$/}},rule:{pattern:/<[^<>\r\n\t]+>/,inside:{punctuation:/^<|>$/}},operator:/::=|[|()[\]{}*+?]|\.{3}/},n.languages.rbnf=n.languages.bnf}n.exports=e,e.displayName="bnf",e.aliases=["rbnf"]}}]);
+//# sourceMappingURL=react-syntax-highlighter_languages_refractor_bnf.af24f0d3.chunk.js.map
