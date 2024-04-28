@@ -1,4 +1,6 @@
-# <div style="display:flex;align-items:center"><img src="./docs/logo.png" width="70"> Pythscrip</div>
+<img src="./docs/logo.png" width="100">
+
+# Pythscrip
 
 Pythscrip is a "mini"-golfing language that incorporates syntax and features from both Python and Javascript to create an improved version of Pyth with advanced features such as functions, classes, repeating, and more. Pythscrip is inspired by the concise syntax of Pyth and also utilizes its compact math syntax
 
