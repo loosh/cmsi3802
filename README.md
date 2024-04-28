@@ -1,6 +1,4 @@
-# Pythscrip
-
-![logo](/docs/logo.png)
+# <div style="display:flex;align-items:center"><img src="./docs/logo.png" width="70"> Pythscrip</div>
 
 Pythscrip is a "mini"-golfing language that incorporates syntax and features from both Python and Javascript to create an improved version of Pyth with advanced features such as functions, classes, repeating, and more. Pythscrip is inspired by the concise syntax of Pyth and also utilizes its compact math syntax
 
@@ -21,7 +19,9 @@ Pythscrip is a "mini"-golfing language that incorporates syntax and features fro
 - Shortcuts for tedious tasks
 
 ---
+
 ## Static Errors and Checks
+
 - No error on redeclaring a variable
 - Two functions cannot be declared with the same name
 - Parameter identifiers must be unique from already declared variables
@@ -30,6 +30,7 @@ Pythscrip is a "mini"-golfing language that incorporates syntax and features fro
 - Throw statements can appear anywhere
 - All math checks are handled by the generated JavaScript and thus errors will be thrown at runtime
 - Object member expressions and array subscripts are handled by the generated JavaScript
+
 ---
 
 ## Functionality
