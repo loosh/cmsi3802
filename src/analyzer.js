@@ -134,7 +134,7 @@ export default function analyze(match) {
         context.add(id.sourceString, iterator);
 
         const body = block.rep();
-        const stepValue = step.children.length === 0 ? null : step.rep();
+        const stepValue = step.children.length == 0 ? null : step.children.map(c => c.rep())[0];
 
         context = context.parent;
         return new core.ForRangeStmt(iterator, start, end, stepValue, body);
