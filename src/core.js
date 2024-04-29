@@ -11,8 +11,8 @@ export class VariableDeclaration {
 }
 
 export class Variable {
-  constructor(name, type) {
-    Object.assign(this, { name, type });
+  constructor(name) {
+    Object.assign(this, { name });
   }
 }
 
@@ -68,10 +68,10 @@ export class RepeatStmt {
 }
 
 export class ForRangeStmt {
-  constructor(variable, expression1, expression2, step = 1, body) {
+  constructor(variable, low, high = null, step = 1, body) {
     this.variable = variable; // The loop variable
-    this.expression1 = expression1; // Start expression for range or the expression for direct
-    // this.expression2 = expression2 || null; // End expression for range, null for direct
+    this.low = low; // Start expression for range or the expression for direct
+    this.high = high;
     this.step = step; // Step for range, null if not provided
     this.body = body; // The loop body
   }
@@ -181,7 +181,7 @@ export class ReturnStmt {
   }
 }
 
-export class ShortReturnStatement {
+export class ShortReturnStmt {
   constructor() { }
 }
 

@@ -61,7 +61,7 @@ export default function analyze(match) {
       },
       VarDecl(id, _eq, expression) {
         const intializer = expression.rep();
-        const variable = new core.Variable(id.sourceString, intializer.type);
+        const variable = new core.Variable(id.sourceString);
         context.add(id.sourceString, variable);
         return new core.VariableDeclaration(variable, intializer);
       },
@@ -184,7 +184,7 @@ export default function analyze(match) {
       },
       Statement_shortreturn(returnKeyword) {
         mustBeInAFunction({ at: returnKeyword });
-        return new core.ShortReturnStatement();
+        return new core.ShortReturnStmt();
       },
       Exp_conditional(consequent, _q, test, _e, alternate) {
         return new core.ConditionalExpression(test.rep(), consequent.rep(), alternate.rep());
