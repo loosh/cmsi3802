@@ -28,7 +28,6 @@ export default function optimize(node) {
 
 const optimizers = {
   Program(p) {
-    console.log(util.inspect(p, { depth: 10 }));
     p.statements = p.statements.flatMap(optimize);
     return p;
   },

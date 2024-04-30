@@ -2,7 +2,7 @@
 // accepts a program representation and returns the JavaScript translation
 // as a string.
 
-import { standardLibrary } from "./core.js";
+import { TryStmt, standardLibrary } from "./core.js";
 import util from "util";
 
 export default function generate(program) {
@@ -64,7 +64,7 @@ export default function generate(program) {
       if (v === standardLibrary.pi) return "Math.PI";
       return v.name;
     },
-    Function(f) {
+    Func(f) {
       return f.name;
     },
     Assignment(s) {
@@ -72,6 +72,9 @@ export default function generate(program) {
     },
     BreakStmt(s) {
       output.push("break;");
+    },
+    ContinueStmt(s) {
+      output.push("continue;");
     },
     ReturnStmt(s) {
       output.push(`return ${gen(s.source)};`);
@@ -120,6 +123,16 @@ export default function generate(program) {
       s.body.forEach(gen);
       output.push("}");
     },
+    TryStmt(s) {
+      output.push("try {");
+      s.body.forEach(gen);
+      output.push(`} catch (${s.exceptParams.map(gen).join(', ')}) {`);
+      s.exceptBody.forEach(gen);
+      output.push("}");
+    },
+    ThrowStmt(s) {
+      output.push(`throw ${gen(s.exp)};`);
+    },
     ConditionalExpression(e) {
       return `((${gen(e.test)}) ? (${gen(e.consequent)}) : (${gen(e.alternate)}))`;
     },
@@ -130,16 +143,14 @@ export default function generate(program) {
       const operand = gen(e.operand);
       if (e.op === "#") {
         return `${operand}.length`;
-      } else if (e.op === "random") {
-        return `((a=>a[~~(Math.random()*a.length)])(${operand}))`;
       }
       if (e.op == "++" || e.op == "--") {
         return output.push(`${operand}${e.op};`);
       }
-      return `${opConversions[e.op] ?? e.op}(${operand})`;
-    },
-    EmptyOptional(e) {
-      return "undefined";
+      if (e.op == "F") {
+        return `Array.from({ length: ${operand} }, (_, i) => i + 1).reduce((a, b) => a * b, 1)`;
+      }
+      return `${opConversions[e.op]}(${operand})`;
     },
     Subscript(e) {
       return `${gen(e.array)}[${gen(e.index)}]`;

@@ -16,13 +16,6 @@ export class Variable {
   }
 }
 
-
-export class PrintStmt {
-  constructor(argument) {
-    this.argument = argument;
-  }
-}
-
 export class IfStmt {
   constructor(test, consequent, alternate) {
     Object.assign(this, { test, consequent, alternate });

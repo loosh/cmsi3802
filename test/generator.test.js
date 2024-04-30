@@ -285,6 +285,7 @@ const fixtures = [
     name: 'string loop',
     source: `
       i in 1,10:
+        ?*i 2 == 6: ct;
         log(*i 10);
           
       s = 'hello'
@@ -295,6 +296,9 @@ const fixtures = [
     `,
     expected: dedent`
       for (let i = 1; i < 10; i += 1) {
+        if (((i * 2) == 6)) {
+          continue;
+        }
         console.log((i * 10));
       }
       let s = 'hello';
@@ -317,6 +321,38 @@ const fixtures = [
       let arr = [1,2,3,4,5];
       arr[0] = 10;
       arr[1] = arr[0];
+    `
+  },
+  {
+    name: 'function name',
+    source: `
+      f test(a) =>
+        r a ~= 5F;
+      log(test)
+    `,
+    expected: dedent`
+      function test(a) {
+        return (a != Array.from({ length: 5 }, (_, i) => i + 1).reduce((a, b) => a * b, 1));
+      }
+      console.log(test);
+    `
+  },
+  {
+    name: 'try catch',
+    source: `
+    height = 5
+    t: ?height < 6: th 'Too Short';;
+    e(error): log(error);
+    `,
+    expected: dedent`
+      let height = 5;
+      try {
+        if ((height < 6)) {
+          throw 'Too Short';
+        }
+      } catch (error) {
+        console.log(error);
+      }
     `
   }
 ];
