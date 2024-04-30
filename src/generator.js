@@ -38,6 +38,8 @@ export default function generate(program) {
     '_': '-'
   };
 
+  console.log(util.inspect(program, { depth: 10 }));
+
   const gen = (node, isArgument = false) => {
     return generators?.[node?.constructor?.name]?.(node, isArgument) ?? node;
   };
@@ -72,7 +74,7 @@ export default function generate(program) {
       output.push("break;");
     },
     ReturnStmt(s) {
-      output.push(`return ${gen(s.expression)};`);
+      output.push(`return ${gen(s.source)};`);
     },
     ShortReturnStmt(s) {
       output.push("return;");
@@ -107,9 +109,9 @@ export default function generate(program) {
       output.push("}");
     },
     ForRangeStmt(s) {
-      const i = targetName(s.iterator);
-      const step = s.step ? gen(s.step) : "1";
-      output.push(`for (let ${i} = ${gen(s.low)}; ${i} <= ${gen(s.high)}; ${i} += ${step}) {`);
+      const i = s.variable.name;
+      const step = s.step ? gen(s.step) : 1;
+      output.push(`for (let ${i} = ${gen(s.low)}; ${i} < ${gen(s.high)}; ${i} += ${step}) {`);
       s.body.forEach(gen);
       output.push("}");
     },
@@ -139,34 +141,38 @@ export default function generate(program) {
     EmptyOptional(e) {
       return "undefined";
     },
-    SubscriptExpression(e) {
+    Subscript(e) {
       return `${gen(e.array)}[${gen(e.index)}]`;
     },
     ArrayExpression(e) {
       return `[${e.elements.map(gen).join(",")}]`;
     },
+    DictExpression(e) {
+      return `{${e.elements.map(gen).join(", ")}}`;
+    },
+    DictItem(e) {
+      return `${gen(e.key)}: ${gen(e.value)}`;
+    },
     MemberExpression(e) {
       const object = gen(e.object);
-      const id = JSON.stringify(gen(e.id));
+      const id = gen(e.id);
       const chain = e.chain === "." ? "" : e.chain;
-      return `(${object}${chain}[${id}])`;
+      return `${object}${chain}${id}`;
+    },
+    CallStmt(c) {
+      const call = c.call;
+      output.push(`${gen(call)};`);
     },
     FuncCall(c) {
-      console.log(c);
-
       const targetCode = standardFunctions.has(c.name)
         ? standardFunctions.get(c.name)(c.args.map(gen))
         : `${gen(c.name)}(${c.args.map(gen).join(", ")})`;
 
-      if (c.exp == true) {
-        return targetCode;
-      }
-
-      // Calls in expressions vs in statements are handled differently
-      output.push(`${targetCode};`);
-    },
+      return targetCode;
+    }
   };
 
   gen(program);
+  console.log(output.join("\n"));
   return output.join("\n");
 }

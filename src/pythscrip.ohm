@@ -3,7 +3,7 @@ Pythscrip {
   Statement = FuncDecl
             | IfStmt
             | LoopStmt
-            | Primary_call
+            | Primary_call                            --call
             | VarDecl
             | Primary "=" Exp                         --assign
             | Exp
@@ -46,7 +46,8 @@ Pythscrip {
             | "{" ListOf<DictItem, ","> "}"            --dict
             | Primary ("." | "?.") id                  --member
             | Primary "[" Exp "]"                      --subscript        
-            | id                                       --id              
+            | id                                       --id       
+            | "(" Exp ")"                              --paren       
 
   relop     = "<=" | ">=" | "==" | "~=" | "<" | ">"
   assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="

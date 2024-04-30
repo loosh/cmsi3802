@@ -69,11 +69,11 @@ export class RepeatStmt {
 
 export class ForRangeStmt {
   constructor(variable, low, high = null, step = 1, body) {
-    this.variable = variable; // The loop variable
-    this.low = low; // Start expression for range or the expression for direct
+    this.variable = variable;
+    this.low = low;
     this.high = high;
-    this.step = step; // Step for range, null if not provided
-    this.body = body; // The loop body
+    this.step = step;
+    this.body = body;
   }
 }
 
@@ -83,18 +83,6 @@ export class ForStmt {
   }
 
 }
-
-// export class Block {
-//   constructor(statements) {
-//     this.statements = statements;
-//   }
-// }
-
-// export class IntrinsicFunction {
-//   constructor(name, parameterCount) {
-//     Object.assign(this, { name, parameterCount });
-//   }
-// }
 
 export class FunctionDeclaration {
   constructor(func, params, body) {
@@ -108,11 +96,11 @@ export class Func {
   }
 }
 
-// export class Param {
-//   constructor(name) {
-//     Object.assign(this, { name });
-//   }
-// }
+export class CallStmt {
+  constructor(call) {
+    Object.assign(this, { call });
+  }
+}
 
 export class FuncCall {
   constructor(name, args) {
@@ -152,7 +140,6 @@ export class ArrayExpression {
 
 export class DictExpression {
   constructor(elements) {
-    // elements is a list of dict items
     this.elements = elements;
   }
 }

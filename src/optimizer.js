@@ -20,6 +20,7 @@
 // This simplifies code generation.
 
 import * as core from "./core.js";
+import util from "util";
 
 export default function optimize(node) {
   return optimizers?.[node?.constructor?.name]?.(node) ?? node;
@@ -27,6 +28,7 @@ export default function optimize(node) {
 
 const optimizers = {
   Program(p) {
+    console.log(util.inspect(p, { depth: 10 }));
     p.statements = p.statements.flatMap(optimize);
     return p;
   },
@@ -196,6 +198,10 @@ const optimizers = {
   },
   MemberExpression(e) {
     e.object = optimize(e.object);
+    return e;
+  },
+  CallStmt(e) {
+    e.call = optimize(e.call);
     return e;
   },
   FuncCall(e) {

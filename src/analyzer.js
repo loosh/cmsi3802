@@ -127,6 +127,9 @@ export default function analyze(match) {
         context = context.parent;
         return new core.ShortIfStmt(test, consequent);
       },
+      Statement_call(call) {
+        return new core.CallStmt(call.rep());
+      },
       LoopStmt_while(_while, exp, block) {
         const test = exp.rep();
         context = context.newChildContext({ inLoop: true });
@@ -242,6 +245,9 @@ export default function analyze(match) {
       },
       Primary_dict(_open, elements, _close) {
         return new core.DictExpression(elements.rep());
+      },
+      Primary_paren(_open, exp, _close) {
+        return exp.rep();
       },
       DictItem(id, _colon, exp) {
         return new core.DictItem(id.sourceString, exp.rep());
