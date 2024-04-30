@@ -37,6 +37,9 @@ const goodPrograms = [
   *.5: log('this will log 5 times');
   a++
   *.10: log('this will log 10 times');`,
+  `f multiplyByTwo(a) => r *a 2;
+  log(5 |> multiplyByTwo |> multiplyByTwo)`,
+  'log(sin(pi) |> log)',
 ];
 
 const badPrograms = [

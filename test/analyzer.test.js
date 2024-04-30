@@ -41,6 +41,8 @@ const semanticChecks = [
   ["built-in sin", "log(sin(pi))"],
   ["built-in cos", "log(cos(93.999))"],
   ["built-in hypot", "log(hypot(_4.0, 3.00001))"],
+  ["pipeline", `f multiplyByTwo(a) => r *a 2;
+  log(5 |> multiplyByTwo |> multiplyByTwo)`]
 ];
 
 // Programs that are syntactically correct but have semantic errors
@@ -68,6 +70,21 @@ const semanticErrors = [
     "Too few args",
     "f c(x) => ; c()",
     /1 argument\(s\) required but 0 passed/,
+  ],
+  [
+    "Pipeline ending in non-function",
+    "f multiplyByTwo(a) => r *a 2; log(5 |> multiplyByTwo |> 5)",
+    /Number is not a function/,
+  ],
+  [
+    "Pipeline ending in non-function (string)",
+    "f multiplyByTwo(a) => r *a 2; log(5 |> multiplyByTwo |> 'test')",
+    /String is not a function/,
+  ],
+  [
+    "Pipeline containing function with wrong arg count",
+    `log(5 |> hypot)`,
+    /Function in pipeline have only one parameter/,
   ]
 ];
 
@@ -82,4 +99,4 @@ describe("The analyzer", () => {
       assert.throws(() => analyze(parse(source)), errorMessagePattern);
     });
   }
-});
+});;

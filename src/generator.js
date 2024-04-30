@@ -2,7 +2,7 @@
 // accepts a program representation and returns the JavaScript translation
 // as a string.
 
-import { TryStmt, standardLibrary } from "./core.js";
+import { standardLibrary } from "./core.js";
 import util from "util";
 
 export default function generate(program) {
@@ -19,6 +19,15 @@ export default function generate(program) {
     [standardLibrary.ln.name, x => `Math.log(${x})`],
     [standardLibrary.hypot.name, ([x, y]) => `Math.hypot(${x},${y})`],
   ]);
+
+  const standardFunctionNames = {
+    [standardLibrary.log.name]: 'console.log',
+    [standardLibrary.sin.name]: 'Math.sin',
+    [standardLibrary.cos.name]: 'Math.cos',
+    [standardLibrary.exp.name]: 'Math.exp',
+    [standardLibrary.ln.name]: 'Math.log',
+    [standardLibrary.hypot.name]: 'Math.hypot'
+  };
 
   const targetName = (mapping => {
     return entity => {
@@ -38,7 +47,7 @@ export default function generate(program) {
     '_': '-'
   };
 
-  console.log(util.inspect(program, { depth: 10 }));
+  // console.log(util.inspect(program, { depth: 10 }));
 
   const gen = (node, isArgument = false) => {
     return generators?.[node?.constructor?.name]?.(node, isArgument) ?? node;
@@ -132,6 +141,11 @@ export default function generate(program) {
     },
     ThrowStmt(s) {
       output.push(`throw ${gen(s.exp)};`);
+    },
+    PipelineExpression(e) {
+      const sequence = e.sequence.map(gen);
+      const [first, ...rest] = sequence;
+      return rest.reduce((acc, cur) => `${standardFunctionNames[cur] ?? cur}(${acc})`, standardFunctionNames[first] ?? first);
     },
     ConditionalExpression(e) {
       return `((${gen(e.test)}) ? (${gen(e.consequent)}) : (${gen(e.alternate)}))`;

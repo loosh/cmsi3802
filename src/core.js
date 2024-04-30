@@ -34,6 +34,12 @@ export class WhileStmt {
   }
 }
 
+export class PipelineExpression {
+  constructor(sequence) {
+    this.sequence = sequence;
+  }
+}
+
 export class TryStmt {
   constructor(body, exceptParams, exceptBody) {
     Object.assign(this, { body, exceptParams, exceptBody });

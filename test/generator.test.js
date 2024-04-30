@@ -354,6 +354,26 @@ const fixtures = [
         console.log(error);
       }
     `
+  },
+  {
+    name: 'pipeline',
+    source: `
+    f multiplyByTwo(a) =>
+      r *a 2;
+    f addOne(b) =>
+      r +b 1;
+    log(5 |> multiplyByTwo |> multiplyByTwo |> addOne)
+    log(*2 5 |> log)`,
+    expected: dedent`
+      function multiplyByTwo(a) {
+        return (a * 2);
+      }
+      function addOne(b) {
+        return (b + 1);
+      }
+      console.log(addOne(multiplyByTwo(multiplyByTwo(5))));
+      console.log(console.log((2 * 5)));
+    `
   }
 ];
 

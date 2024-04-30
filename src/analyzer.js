@@ -196,10 +196,25 @@ export default function analyze(match) {
         mustBeInAFunction({ at: returnKeyword });
         return new core.ShortReturnStmt();
       },
-      Exp_conditional(consequent, _q, test, _e, alternate) {
+      Exp_pipeline(left, _pipe, right) {
+        const rightMap = right.children.map(c => c.rep());
+        const last = rightMap[rightMap.length - 1];
+
+        must(last instanceof core.Func, `${last.constructor.name} is not a function`, { at: _pipe });
+
+        for (const item of rightMap) {
+          if (item instanceof core.Func) {
+            must(item.paramCount === 1, 'Function in pipeline have only one parameter', { at: _pipe });
+          }
+        }
+
+        // return pipeline expression with single array
+        return new core.PipelineExpression([left.rep(), ...rightMap]);
+      },
+      Exp1_conditional(consequent, _q, test, _e, alternate) {
         return new core.ConditionalExpression(test.rep(), consequent.rep(), alternate.rep());
       },
-      Exp1_or(exp, _or, exps) {
+      Exp2_or(exp, _or, exps) {
         let left = exp.rep();
         for (let e of exps.children) {
           let right = e.rep();
@@ -207,7 +222,7 @@ export default function analyze(match) {
         }
         return left;
       },
-      Exp1_and(exp, _or, exps) {
+      Exp2_and(exp, _or, exps) {
         let left = exp.rep();
         for (let e of exps.children) {
           let right = e.rep();
@@ -215,10 +230,10 @@ export default function analyze(match) {
         }
         return left;
       },
-      Exp2_relational(left, op, right) {
+      Exp3_relational(left, op, right) {
         return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
       },
-      Exp3_math_assign(left, op, right) {
+      Exp4_math_assign(left, op, right) {
         return new core.BinaryExpression(op.sourceString, left.rep(), right.rep());
       },
       Prefix_unary(op, exp) {

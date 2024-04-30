@@ -16,6 +16,16 @@ const examples = [
 }`
   },
   {
+    pythscrip: `f multiplyByTwo(a) => r * a 2;
+log(5 |> multiplyByTwo |> multiplyByTwo) // 21
+    
+    `,
+    javascript: `function multiplyByTwo(a) {
+  return (a * 2);
+}
+console.log(multiplyByTwo(multiplyByTwo(5)));`
+  },
+  {
     pythscrip: `*.5: log('This will run 5 times')
     
     `,

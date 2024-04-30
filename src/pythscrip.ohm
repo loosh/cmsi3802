@@ -20,14 +20,16 @@ Pythscrip {
   Params    = "(" ListOf<Param, ","> ")"
   Param     = id
 
-  Exp       = Exp1 "?" Exp1 "!" Exp                    --conditional
+  Exp       = Exp1 ("|>" Exp1)+                         --pipeline        
             | Exp1
-  Exp1      = Exp1 ("|" Exp2)+                         --or
-            | Exp1 ("&" Exp2)+                         --and
+  Exp1       = Exp2 "?" Exp2 "!" Exp                   --conditional
             | Exp2
-  Exp2      = Exp2 relop Exp3                          --relational
+  Exp2      = Exp2 ("|" Exp3)+                         --or
+            | Exp2 ("&" Exp3)+                         --and
             | Exp3
-  Exp3      = Exp3 assignop Exp3                       --math_assign
+  Exp3      = Exp3 relop Exp4                          --relational
+            | Exp4
+  Exp4      = Exp4 assignop Exp4                       --math_assign
             | Postfix
   Postfix   = Postfix ("++" | "--" | "F")              --unary
             | Term
@@ -47,7 +49,7 @@ Pythscrip {
             | Primary ("." | "?.") id                  --member
             | Primary "[" Exp "]"                      --subscript        
             | id                                       --id       
-            | "(" Exp ")"                              --paren       
+            | "(" Exp ")"                              --paren   
 
   relop     = "<=" | ">=" | "==" | "~=" | "<" | ">"
   assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
@@ -63,8 +65,6 @@ Pythscrip {
             | id in Exp Block                          --direct
 
   TryStmt   = try Block except Params Block  
-
-  // PipeStmt  = Primary ("|>" (Primary | log))+
 
   Block     = ":" Statement* ";"
 
