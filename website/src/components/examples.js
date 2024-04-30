@@ -17,7 +17,7 @@ const examples = [
   },
   {
     pythscrip: `f multiplyByTwo(a) => r * a 2;
-log(5 |> multiplyByTwo |> multiplyByTwo) // 21
+log(5 |> multiplyByTwo |> multiplyByTwo) // 20
     
     `,
     javascript: `function multiplyByTwo(a) {
@@ -129,7 +129,7 @@ export default function Examples() {
   }, [showMore]);
 
   return (
-    <div className='flex flex-col gap-4 ml-auto mr-auto max-w-4xl w-11/12 items-start'>
+    <div className='flex flex-col gap-4 ml-auto mr-auto max-w-5xl w-11/12 items-start'>
       <div className='flex w-full justify-between'>
         <h1 className='text-2xl font-bold'>Pythscrip</h1>
         <h1 className='text-2xl font-bold'>Javascript</h1>
