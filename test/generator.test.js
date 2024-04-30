@@ -204,6 +204,120 @@ const fixtures = [
       let x = 0.5;
       console.log((Math.sin(x) - (Math.cos(x) + (Math.exp(x) * (Math.log(x) / Math.hypot(2.3,x))))));
     `,
+  },
+  {
+    name: 'if',
+    source: `
+    x = 5
+    ?x < 5 | _x > 5: log('x is less than 5');
+    !? x > 5: log('x is greater than 5');
+    !: log('x is equal to 5');`,
+    expected: dedent`
+      let x = 5;
+      if (((x < 5) || (-(x) > 5))) {
+        console.log('x is less than 5');
+      } else
+        if ((x > 5)) {
+          console.log('x is greater than 5');
+      } else {
+        console.log('x is equal to 5');
+      }
+    `,
+  },
+  {
+    name: 'recursive gcd',
+    source: `
+    f gcd(a,b) =>
+    ?b==0: r a;
+    !: r gcd(b, % a b);;`,
+    expected: dedent`
+      function gcd(a, b) {
+        if ((b == 0)) {
+          return a;
+        } else {
+          return gcd(b, (a % b));
+        }
+      }
+    `
+  },
+  {
+    name: 'factorial',
+    source: `
+    f factorial(n) =>
+    ?n==0: r 1;
+    !: r * n factorial(-n 1);;`,
+    expected: dedent`
+      function factorial(n) {
+        if ((n == 0)) {
+          return 1;
+        } else {
+          return (n * factorial((n - 1)));
+        }
+      }
+    `
+  },
+  {
+    name: 'fibonacci',
+    source: `
+    f fibonacci(n) =>
+      ?n < 2: r n;
+      !: r + fibonacci(-n 1) fibonacci(-n 2);;`,
+    expected: dedent`
+      function fibonacci(n) {
+        if ((n < 2)) {
+          return n;
+        } else {
+          return (fibonacci((n - 1)) + fibonacci((n - 2)));
+        }
+      }
+    `
+  },
+  {
+    name: 'repeat',
+    source: `*.5: log('This will run 5 times');`,
+    expected: dedent`
+      for (let i_1 = 0; i_1 < 5; i_1++) {
+        console.log('This will run 5 times');
+      }
+    `
+  },
+  {
+    name: 'string loop',
+    source: `
+      i in 1,10:
+        log(*i 10);
+          
+      s = 'hello'
+
+      i in 0,#s: log(s[i]);
+
+      i in s: log(i);
+    `,
+    expected: dedent`
+      for (let i = 1; i < 10; i += 1) {
+        console.log((i * 10));
+      }
+      let s = 'hello';
+      for (let i = 0; i < s.length; i += 1) {
+        console.log(s[i]);
+      }
+      for (let i of s) {
+        console.log(i);
+      }
+    `
+  },
+  {
+    name: 'string loop',
+    source: `
+      arr = [1, 2, 3, 4, 5]
+      arr[0] = 10
+      arr[1] = arr[0]
+    `,
+    expected: dedent`
+      let arr = [1,2,3,4,5];
+      arr[0] = 10;
+      arr[1] = arr[0];
+    `
   }
 ];
 

@@ -156,7 +156,7 @@ export default function generate(program) {
     MemberExpression(e) {
       const object = gen(e.object);
       const id = gen(e.id);
-      const chain = e.chain === "." ? "" : e.chain;
+      const chain = e.chain;
       return `${object}${chain}${id}`;
     },
     CallStmt(c) {
@@ -173,6 +173,5 @@ export default function generate(program) {
   };
 
   gen(program);
-  console.log(output.join("\n"));
   return output.join("\n");
 }
