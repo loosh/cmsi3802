@@ -22,7 +22,7 @@
 import * as core from "./core.js";
 
 export default function optimize(node) {
-  return optimizers?.[node.constructor.name]?.(node) ?? node;
+  return optimizers?.[node?.constructor?.name]?.(node) ?? node;
 }
 
 const optimizers = {
@@ -32,7 +32,7 @@ const optimizers = {
   },
   VariableDeclaration(d) {
     d.variable = optimize(d.variable);
-    d.initializer = optimize(d.initializer);
+    d.value = optimize(d.value);
     return d;
   },
   FunctionDeclaration(d) {
@@ -73,7 +73,7 @@ const optimizers = {
   IfStmt(s) {
     s.test = optimize(s.test);
     s.consequent = s.consequent.flatMap(optimize);
-    if (s.alternate?.kind?.endsWith?.("IfStmt")) {
+    if (s.alternate?.constructor?.name?.endsWith?.("IfStmt")) {
       s.alternate = optimize(s.alternate);
     } else {
       s.alternate = s.alternate.flatMap(optimize);

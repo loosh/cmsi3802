@@ -186,7 +186,7 @@ export class ShortReturnStmt {
 }
 
 export const standardLibrary = Object.freeze({
-  π: new Variable("π", true),
+  pi: new Variable("pi", true),
   log: new Func("log", 1),
   sin: new Func("sin", 1),
   cos: new Func("cos", 1),

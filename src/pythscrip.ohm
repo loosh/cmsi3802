@@ -1,7 +1,6 @@
 Pythscrip {
   Program   = Statement+
   Statement = FuncDecl
-            | PrintStmt
             | IfStmt
             | LoopStmt
             | Primary_call
@@ -53,8 +52,6 @@ Pythscrip {
   assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
   binaryop  = "+" | "-" | "*" | "/" | "%"
 
-  PrintStmt = log "(" Exp ")"
-
   IfStmt    = "?" Exp Block "!" Block                  --with_else
             | "?" Exp Block "!" IfStmt                 --nested_if
             | "?" Exp Block                            --plain_if
@@ -66,13 +63,12 @@ Pythscrip {
 
   TryStmt   = try Block except Params Block  
 
-  PipeStmt  = Primary ("|>" (Primary | log))+
+  // PipeStmt  = Primary ("|>" (Primary | log))+
 
   Block     = ":" Statement* ";"
 
-  true        = "true" ~idchar
-  false       = "false" ~idchar
-  log       = "log" ~idchar
+  true      = "true" ~idchar
+  false     = "false" ~idchar
   function  = "f" ~idchar
   in        = "in" ~idchar
   while     = "w" ~idchar
@@ -86,7 +82,7 @@ Pythscrip {
   id        = ~keyword letter idchar*
   idchar    = alnum | "_"
 
-  keyword   = log | function | in | while | throw 
+  keyword   =  function | in | while | throw 
             |  try | except | break | continue | return
 
   numlit    = digit+ ("." digit+)? (("e" | "E") ("+" | "-")? digit+)?

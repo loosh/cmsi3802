@@ -37,8 +37,8 @@ const semanticChecks = [
   ["subscript using member exp", "x={y: 1} a=[1,2] log(a[x.y])"],
   ["array of struct", "x=[{}, {}]"],
   ["outer variable", "x=1 w false: log(x);"],
-  ["built-in constants", "log(* 25.0 π)"],
-  ["built-in sin", "log(sin(π))"],
+  ["built-in constants", "log(* 25.0 pi)"],
+  ["built-in sin", "log(sin(pi))"],
   ["built-in cos", "log(cos(93.999))"],
   ["built-in hypot", "log(hypot(_4.0, 3.00001))"],
 ];

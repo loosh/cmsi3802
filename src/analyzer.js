@@ -62,11 +62,23 @@ export default function analyze(match) {
       VarDecl(id, _eq, expression) {
         const intializer = expression.rep();
         const variable = new core.Variable(id.sourceString);
+
+        if (context.lookup(id.sourceString)) {
+          const source = expression.rep();
+          const variable = context.lookup(id.sourceString);
+          return new core.Assignment(variable, source);
+        }
+
         context.add(id.sourceString, variable);
         return new core.VariableDeclaration(variable, intializer);
       },
-      PrintStmt(_log, _open, exp, _close) {
-        return new core.PrintStmt(exp.rep());
+      Statement_assign(target, _eq, source) {
+        const sourceExpression = source.rep();
+        const targetVariable = target.rep();
+
+        mustHaveBeenFound(targetVariable, targetVariable.name, { at: target });
+
+        return new core.Assignment(targetVariable, sourceExpression);
       },
       FuncDecl(_f, id, parameters, _arrow, statements, _semi) {
         const func = new core.Func(id.sourceString);
@@ -151,11 +163,6 @@ export default function analyze(match) {
       Block(_open, statements, _close) {
         return statements.children.map(s => s.rep());
       },
-      Statement_assign(variable, _eq, expression) {
-        const source = expression.rep();
-        const target = variable.rep();
-        return new core.Assignment(target, source);
-      },
       Statement_break(breakKeyword) {
         mustBeInLoop({ at: breakKeyword });
         return new core.BreakStmt();
@@ -228,7 +235,7 @@ export default function analyze(match) {
         const targetParamCount = target.paramCount;
         mustHaveCorrectArgumentCount(exps.length, targetParamCount, { at: open });
 
-        return new core.FuncCall(callee, args.rep());
+        return new core.FuncCall(callee.name, args.rep());
       },
       Primary_array(_open, elements, _close) {
         return new core.ArrayExpression(elements.rep());
