@@ -30,9 +30,6 @@ export default function analyze(match) {
   }
 
   function mustNotAlreadyBeDeclared(name, at) {
-    // console.log(
-    //   `Looking for ${name} in ${util.inspect(context, { depth: 15 })}`
-    // );
     must(!context.lookup(name), `Identifier ${name} already declared`, at);
   }
 

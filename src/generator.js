@@ -47,8 +47,6 @@ export default function generate(program) {
     '_': '-'
   };
 
-  // console.log(util.inspect(program, { depth: 10 }));
-
   const gen = (node, isArgument = false) => {
     return generators?.[node?.constructor?.name]?.(node, isArgument) ?? node;
   };
