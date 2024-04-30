@@ -13,13 +13,13 @@ export default function About() {
 
 function DeveloperBio({ name, image, bio, website }) {
   return (
-    <div className='flex gap-8 w-full md:w-1/2'>
-      <img src={image} alt={name} className='w-24 h-24 md:w-36 md:h-36 rounded-full' />
+    <div className='flex gap-8 w-full md:w-1/2 px-6 mb-12'>
+      <img src={image} alt={name} className='w-24 h-24 md:w-28 md:h-28 rounded-full' />
       <div className='flex flex-col gap-2'>
         <h2 className='text-3xl font-semibold'>{name}</h2>
         <p className='text-sm md:text-base'>{bio}</p>
         {website && <div>
-          <a href={website} target='_blank' rel='noopener noreferrer' className='text-logoblue font-medium text-sm md:text-base'>My Portfolio Site</a>
+          <a href={website} target='_blank' rel='noopener noreferrer' className='text-blue-500 font-sm text-sm md:text-base'>My Portfolio Site</a>
         </div>}
       </div>
     </div>

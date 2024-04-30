@@ -4,20 +4,24 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 
 const examples = [
   {
-    pythscrip: `log('Hello world, from Pythscrip!')`,
-    javascript: `console.log("Hello world")`
+    pythscrip: `log('Hello world, beep boop')`,
+    javascript: `console.log('Hello world, beep boop')`
   },
   {
-    pythscrip: `f addFive(x) => r + x * 5 _2;`,
-    javascript: `const addFive = (x) => { return x + (5 * -2); }`
+    pythscrip: `f addFive(x) => r + x * 5 _2;
+    
+    `,
+    javascript: `function addFive(x) {
+    return (x + -10);
+}`
   },
   {
     pythscrip: `*.5: log('This will run 5 times')
     
     `,
-    javascript: `for (let i = 0; i < 5; i++) {
-    console.log("This will run 5 times");
-}`
+    javascript: `for (let i_1 = 0; i_1 < 5; i_1++) {
+    console.log('This will run 5 times');
+};`
   },
   {
     pythscrip: `x = 5
@@ -27,93 +31,83 @@ const examples = [
 
 
 
+
 `,
-    javascript: `x = 5
-if (x < 5) {
-    console.log("x is less than 5");
-  } else if (x > 5) {
-    console.log("x is greater than 5");
-  } else {
-    console.log("x is equal to 5");
-}`,
+    javascript: `let x = 5;
+    if ((x < 5)) {
+      console.log('x is less than 5');
+    } else
+    if ((x > 5)) {
+      console.log('x is greater than 5');
+    } else {
+      console.log('x is equal to 5');
+    }`,
   },
   {
-    pythscrip: `f gcd(a,b) =>
-?a==b: r a;
-!?a>b: r gcd(-a b,b);
-!: r gcd(a,b);;
+    pythscrip: `f gcd(a,b) => ?b==0: r a; !: r gcd(b, % a b);;
+// Concise one line functions
 
 
 
 
 `,
-    javascript: `const gcd = (a,b) => {
-    if (a ==b) {
+    javascript: `function gcd(a, b) {
+    if ((b == 0)) {
       return a;
-    } else if (a > b) {
-      return gcd(a-b, b);
     } else {
-      return gcd(a,b);
+      return gcd(b, (a % b));
     }
 }`
   },
   {
-    pythscrip: `f factorial(n) => 
-?n == 0: r 1; 
-!: r * n factorial(n - 1);;
+    pythscrip: `f factorial(n) =>
+    ?n==0: r 1;
+    !: r * n factorial(-n 1);;
 
 
 
 `,
-    javascript: `const factorial = (n) => {
-    if (n == 0) {
+    javascript: `function factorial(n) {
+    if ((n == 0)) {
       return 1;
     } else {
-      return n * factorial(n - 1);
+      return (n * factorial((n - 1)));
     }
 }`
   },
   {
     pythscrip: `f fibonacci(n) =>
-?n < 2: r n;
-!: r fibonacci(n - 1) + fibonacci(n - 2);;
+    ?n < 2: r n;
+    !: r + fibonacci(-n 1) fibonacci(-n 2);;
 
 
 
 `,
-    javascript: `const fibonacci = (n) => {
-    if (n < 2) {
+    javascript: `function fibonacci(n) {
+    if ((n < 2)) {
       return n;
     } else {
-      return fibonacci(n - 1) + fibonacci(n - 2);
+      return (fibonacci((n - 1)) + fibonacci((n - 2)));
     }
 }`
   },
   {
-    pythscrip: `i in 1,10:
-log(*i 10);
-  
-s = 'hello
-
-
+    pythscrip: `
+s = 'hello'
 
 i in 0,#s: log(s[i]);`,
-    javascript: `for (let i = 0; i < 10; i++) {
-    console.log(i * 10)
-}
-    
-var s = "hello"
-for (let i = 0; i < s.length(); i++) {
-    console.log(s[i])
+    javascript: `let s = 'hello';
+for (let i = 0; i < s.length; i += 1) {
+  console.log(s[i]);
 }`
   },
   {
     pythscrip: `a = ['banana', 'cherry', 'apple']
-log(#a)   //prints 3
-log(a[0]) //prints banana`,
-    javascript: `var a = ['banana', 'cherry', 'apple']
-console.log(a.length) // prints 3
-console.log(a[0])     // prints banana`
+log(#a) 
+log(a[0])`,
+    javascript: `var a = ['banana', 'cherry', 'apple'];
+console.log(a.length);
+console.log(a[0]);`
   }
 ];
 
