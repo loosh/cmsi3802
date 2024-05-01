@@ -2,7 +2,7 @@
 
 # Pythscrip
 
-[Our Website](https://loosh.github.io/pythscrip/)
+[Our Website](https://loosh.github.io/pythscrip/) • [View Grammar](src/pythscrip.ohm)
 
 Pythscrip is a "mini"-golfing language that incorporates syntax and features from both Python and Javascript to create an improved version of Pyth with advanced features such as functions, pipelines, repeating, and more. Pythscrip is inspired by the conciseness of Pyth and utilizes its compact math syntax.
 
