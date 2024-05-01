@@ -97,27 +97,23 @@ f addFive(x) => r +x 5;
 #### Javascript
 
 ```
-
 let h = 'hello';
 console.log(h.split('').reverse().join(''));
 console.log(h.toUpperCase());
 console.log(h.toLowerCase());
 let fruits = ['apple','banana','orange'];
 console.log(fruits[Math.floor(Math.random() * fruits.length)]);
-
 ```
 
 #### Pythscrip
 
 ```
-
 h = 'hello'
 log(rev(h))
 log(up(h))
 log(low(h))
 fruits = ['apple', 'banana', 'orange']
 log(rand(fruits))
-
 ```
 
 ---
@@ -163,7 +159,6 @@ log(5 |> multiplyByTwo |> multiplyByTwo |> addOne) // 21
 ##### Javascript
 
 ```
-
 let x = 5;
 if (x < 5) {
   console.log('x is less than 5');
@@ -172,18 +167,15 @@ if (x < 5) {
 } else {
   console.log('x is equal to 5');
 }
-
 ```
 
 ##### Pythscrip
 
 ```
-
 x = 5 
 ?x < 5: log('x is less than 5'); 
 !? x > 5: log('x is greater than 5'); 
 !: log('x is equal to 5');
-
 ```
 
 #### Ternary Statements
@@ -191,17 +183,13 @@ x = 5
 ##### Javascript
 
 ```
-
 height > 6 ? true : false;
-
 ```
 
 ##### Pythscrip
 
 ```
-
 true ? height > 6 ! false
-
 ```
 
 ---
@@ -211,22 +199,18 @@ true ? height > 6 ! false
 #### Javascript
 
 ```
-
 try { 
   if (height < 6) throw "Too Short"; 
 } catch(error) { 
   console.log(error); 
 }
-
 ```
 
 #### Pythscrip
 
 ```
-
 t: ?height < 6: th 'Too Short';; 
 e(error): log(error);
-
 ```
 
 ---
@@ -238,7 +222,6 @@ e(error): log(error);
 ##### Javascript
 
 ```
-
 for (let i = 0; i < 10; i += 1) { 
   console.log(i \* 10); 
 }
@@ -247,17 +230,14 @@ var s = "hello"
 for (let i = 0; i < s.length(); i += 1) { 
   console.log(s[i]); 
 }
-
 ```
 
 ##### Pythscrip
 
 ```
-
 i in 1,10: log(\*i 10);
 
 s = 'hello' i in 0,#s: log(s[i]);
-
 ```
 
 #### While Loop
@@ -265,7 +245,6 @@ s = 'hello' i in 0,#s: log(s[i]);
 ##### Javascript
 
 ```
-
 let i = -10;
 while (i <= 10) {
   if (i == 5) continue;
@@ -273,20 +252,17 @@ while (i <= 10) {
   console.log(i);
   i += 1 ;
 }
-
 ```
 
 ##### Pythscrip
 
 ```
-
 i = _10 
 w i<= 10: 
   ?i==5: ct; 
   ?i==3: br;
   log(i) 
   i += 1;
-
 ```
 
 ---
@@ -296,20 +272,16 @@ w i<= 10:
 #### Javascript
 
 ```
-
 // Would have to use a loop with a defined variable
 for (let i_1 = 0; i_1 < 5; i_1++) {
   console.log('This will log 5 times');
 };
-
 ```
 
 #### Pythscrip
 
 ```
-
 \*.5: log('This will log 5 times');
-
 ```
 
 ---
@@ -321,21 +293,17 @@ for (let i_1 = 0; i_1 < 5; i_1++) {
 #### Javascript
 
 ```
-
 a = ['banana', 'cherry', 'apple'];
 console.log(a.length);
 console.log(a[0]);
-
 ```
 
 #### Pythscrip
 
 ```
-
 a = ['banana', 'cherry', 'apple']
 log(#a)
 log(a[0])
-
 ```
 
 ---
@@ -345,7 +313,6 @@ log(a[0])
 #### Javascript
 
 ```
-
 function gcd(a, b) {
   if ((b == 0)) {
     return a;
@@ -353,24 +320,19 @@ function gcd(a, b) {
     return gcd(b, (a % b));
   }
 }
-
 ```
 
 #### Pythscrip
 
 ```
-
 f gcd(a,b) =>
   ?b==0: r a;
   !: r gcd(b, %a b);;
-
 ```
 
 Or, if you would like it in one line
 
 ```
-
 f gcd(a,b) => ?b==0: r a; !: r gcd(b, % a b);;
-
 ```
 
