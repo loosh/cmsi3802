@@ -40,6 +40,12 @@ export class PipelineExpression {
   }
 }
 
+export class PipelineCall {
+  constructor(name, paramCount) {
+    Object.assign(this, { name, paramCount });
+  }
+}
+
 export class TryStmt {
   constructor(body, exceptParams, exceptBody) {
     Object.assign(this, { body, exceptParams, exceptBody });
@@ -179,4 +185,9 @@ export const standardLibrary = Object.freeze({
   exp: new Func("exp", 1),
   ln: new Func("ln", 1),
   hypot: new Func("hypot", 2),
+  rev: new Func("rev", 1),
+  up: new Func("up", 1),
+  low: new Func("low", 1),
+  cap: new Func("cap", 1),
+  rand: new Func("rand", 1)
 });

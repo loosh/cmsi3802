@@ -42,7 +42,11 @@ const semanticChecks = [
   ["built-in cos", "log(cos(93.999))"],
   ["built-in hypot", "log(hypot(_4.0, 3.00001))"],
   ["pipeline", `f multiplyByTwo(a) => r *a 2;
-  log(5 |> multiplyByTwo |> multiplyByTwo)`]
+  log(5 |> multiplyByTwo |> multiplyByTwo)`],
+  ["reverse string", `h = 'hello' log(rev(h))`],
+  ["upper case string", `h = 'hello' log(up(h))`],
+  ["lower case string", `h = 'HELLO' log(low(h))`],
+  ["random element from array", `fruits = ['apple', 'banana', 'orange'] log(rand(fruits))`],
 ];
 
 // Programs that are syntactically correct but have semantic errors

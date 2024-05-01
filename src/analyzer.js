@@ -205,8 +205,17 @@ export default function analyze(match) {
           }
         }
 
+        // Cast each Func inside the pipeline to a PipelineCall
+        rightMap.forEach((item, index) => {
+          if (item instanceof core.Func) {
+            rightMap[index] = new core.PipelineCall(item.name, item.paramCount);
+          }
+        });
+
+        left = left.rep();
+
         // return pipeline expression with single array
-        return new core.PipelineExpression([left.rep(), ...rightMap]);
+        return new core.PipelineExpression([left, ...rightMap]);
       },
       Exp1_conditional(consequent, _q, test, _e, alternate) {
         return new core.ConditionalExpression(test.rep(), consequent.rep(), alternate.rep());

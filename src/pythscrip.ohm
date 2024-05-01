@@ -3,9 +3,9 @@ Pythscrip {
   Statement = FuncDecl
             | IfStmt
             | LoopStmt
-            | Primary_call                            --call
+            | Primary_call                             --call
             | VarDecl
-            | Primary "=" Exp                         --assign
+            | Primary "=" Exp                          --assign
             | Exp
             | TryStmt
             | throw Exp                                --throw
@@ -37,7 +37,7 @@ Pythscrip {
             | Factor
   Factor    = Primary "^" Factor                       --exponential
             | Prefix 
-  Prefix    = ("#" | "~" | "_") Prefix                 --unary
+  Prefix    = unaryop Prefix                           --unary
             | Primary
   Primary   = true 
             | false
@@ -54,6 +54,7 @@ Pythscrip {
   relop     = "<=" | ">=" | "==" | "~=" | "<" | ">"
   assignop  = "+=" | "-=" | "*=" | "/=" | "%=" | "^="
   binaryop  = "+" | "-" | "*" | "/" | "%"
+  unaryop   = "#" | "~" | "_"
 
   IfStmt    = "?" Exp Block "!" Block                  --with_else
             | "?" Exp Block "!" IfStmt                 --nested_if
@@ -83,7 +84,7 @@ Pythscrip {
   id        = ~keyword letter idchar*
   idchar    = alnum | "_"
 
-  keyword   =  function | in | while | throw 
+  keyword   =  function | in | while | throw
             |  try | except | break | continue | return
 
   numlit    = digit+ ("." digit+)? (("e" | "E") ("+" | "-")? digit+)?

@@ -362,6 +362,9 @@ const fixtures = [
       r *a 2;
     f addOne(b) =>
       r +b 1;
+    f returnFive() =>
+      r 5;
+    log(returnFive() |> addOne)
     log(5 |> multiplyByTwo |> multiplyByTwo |> addOne)
     log(*2 5 |> log)`,
     expected: dedent`
@@ -371,8 +374,44 @@ const fixtures = [
       function addOne(b) {
         return (b + 1);
       }
+      function returnFive() {
+        return 5;
+      }
+      console.log(addOne(returnFive()));
       console.log(addOne(multiplyByTwo(multiplyByTwo(5))));
       console.log(console.log((2 * 5)));
+    `
+  },
+  {
+    name: 'more built in functions',
+    source: `
+    h = 'hello'
+    log(rev(h))
+    log(up(h))
+    log(low(h))
+    fruits = ['apple', 'banana', 'orange']
+    log(rand(fruits))
+    log(fruits |> rand |> up)
+    `,
+    expected: dedent`
+      let h = 'hello';
+      console.log(h.split('').reverse().join(''));
+      console.log(h.toUpperCase());
+      console.log(h.toLowerCase());
+      let fruits = ['apple','banana','orange'];
+      console.log(fruits[Math.floor(Math.random() * fruits.length)]);
+      console.log(fruits[Math.floor(Math.random() * fruits.length)].toUpperCase());
+    `
+  },
+  {
+    name: 'pipeline with built in',
+    source: `
+    h = 'hello'
+    log(h |> rev |> up)
+    `,
+    expected: dedent`
+    let h = 'hello';
+    console.log(h.split('').reverse().join('').toUpperCase());
     `
   }
 ];

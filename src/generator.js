@@ -26,7 +26,11 @@ export default function generate(program) {
     [standardLibrary.cos.name]: 'Math.cos',
     [standardLibrary.exp.name]: 'Math.exp',
     [standardLibrary.ln.name]: 'Math.log',
-    [standardLibrary.hypot.name]: 'Math.hypot'
+    [standardLibrary.hypot.name]: 'Math.hypot',
+    [standardLibrary.rev.name]: `.split('').reverse().join('')`,
+    [standardLibrary.up.name]: '.toUpperCase()',
+    [standardLibrary.low.name]: '.toLowerCase()',
+    [standardLibrary.rand.name]: x => `${x}[Math.floor(Math.random() * ${x}.length)]`,
   };
 
   const targetName = (mapping => {
@@ -72,7 +76,7 @@ export default function generate(program) {
       return v.name;
     },
     Func(f) {
-      return f.name;
+      return standardFunctionNames[f.name] ?? f.name;
     },
     Assignment(s) {
       output.push(`${gen(s.target)} = ${gen(s.source)};`);
@@ -140,10 +144,23 @@ export default function generate(program) {
     ThrowStmt(s) {
       output.push(`throw ${gen(s.exp)};`);
     },
+    PipelineCall(c) {
+      return standardFunctionNames[c.name] ?? c.name;
+    },
     PipelineExpression(e) {
       const sequence = e.sequence.map(gen);
       const [first, ...rest] = sequence;
-      return rest.reduce((acc, cur) => `${standardFunctionNames[cur] ?? cur}(${acc})`, standardFunctionNames[first] ?? first);
+      return rest.reduce((acc, cur) => {
+        if (cur instanceof Function) {
+          return cur(acc);
+        }
+
+        if (cur.startsWith('.') || cur.startsWith(' =>')) {
+          return `${acc}${cur}`;
+        } else {
+          return `${cur}(${acc})`;
+        }
+      }, first);
     },
     ConditionalExpression(e) {
       return `((${gen(e.test)}) ? (${gen(e.consequent)}) : (${gen(e.alternate)}))`;
@@ -187,6 +204,16 @@ export default function generate(program) {
       output.push(`${gen(call)};`);
     },
     FuncCall(c) {
+      if (standardFunctionNames[c.name] && c.args.length === 1) {
+        let name = standardFunctionNames[c.name];
+        if (name instanceof Function) {
+          return name(gen(c.args[0]));
+        }
+        if (name.startsWith('.') || name.startsWith(' =>')) {
+          return `${gen(c.args[0])}${name}`;
+        }
+      }
+
       const targetCode = standardFunctions.has(c.name)
         ? standardFunctions.get(c.name)(c.args.map(gen))
         : `${gen(c.name)}(${c.args.map(gen).join(", ")})`;
