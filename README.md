@@ -4,7 +4,7 @@
 
 [Our Website](https://loosh.github.io/pythscrip/)
 
-Pythscrip is a "mini"-golfing language that incorporates syntax and features from both Python and Javascript to create an improved version of Pyth with advanced features such as functions, classes, repeating, and more. Pythscrip is inspired by the concise syntax of Pyth and also utilizes its compact math syntax
+Pythscrip is a "mini"-golfing language that incorporates syntax and features from both Python and Javascript to create an improved version of Pyth with advanced features such as functions, pipelines, repeating, and more. Pythscrip is inspired by the conciseness of Pyth and utilizes its compact math syntax.
 
 ---
 
@@ -164,7 +164,14 @@ log(5 |> multiplyByTwo |> multiplyByTwo |> addOne) // 21
 
 ```
 
-let x = 5; if (x < 5) { console.log('x is less than 5'); } else if (x > 5) { console.log('x is greater than 5'); } else { console.log('x is equal to 5'); }
+let x = 5;
+if (x < 5) {
+  console.log('x is less than 5');
+} else if (x > 5) {
+  console.log('x is greater than 5');
+} else {
+  console.log('x is equal to 5');
+}
 
 ```
 
@@ -172,7 +179,10 @@ let x = 5; if (x < 5) { console.log('x is less than 5'); } else if (x > 5) { con
 
 ```
 
-x = 5 ?x < 5: log('x is less than 5'); !? x > 5: log('x is greater than 5'); !: log('x is equal to 5');
+x = 5 
+?x < 5: log('x is less than 5'); 
+!? x > 5: log('x is greater than 5'); 
+!: log('x is equal to 5');
 
 ```
 
@@ -202,7 +212,11 @@ true ? height > 6 ! false
 
 ```
 
-try { if (height < 6) throw "Too Short"; } catch(error) { console.log(error); }
+try { 
+  if (height < 6) throw "Too Short"; 
+} catch(error) { 
+  console.log(error); 
+}
 
 ```
 
@@ -210,7 +224,8 @@ try { if (height < 6) throw "Too Short"; } catch(error) { console.log(error); }
 
 ```
 
-t: ?height < 6: th 'Too Short';; e(error): log(error);
+t: ?height < 6: th 'Too Short';; 
+e(error): log(error);
 
 ```
 
@@ -224,9 +239,14 @@ t: ?height < 6: th 'Too Short';; e(error): log(error);
 
 ```
 
-for (let i = 0; i < 10; i += 1) { console.log(i \* 10); }
+for (let i = 0; i < 10; i += 1) { 
+  console.log(i \* 10); 
+}
 
-var s = "hello" for (let i = 0; i < s.length(); i += 1) { console.log(s[i]); }
+var s = "hello"
+for (let i = 0; i < s.length(); i += 1) { 
+  console.log(s[i]); 
+}
 
 ```
 
@@ -246,11 +266,11 @@ s = 'hello' i in 0,#s: log(s[i]);
 
 ```
 
-let i = -10; 
-while (i <= 10) { 
-  if (i == 5) continue; 
-  if (i == 3) break; 
-  console.log(i); 
+let i = -10;
+while (i <= 10) {
+  if (i == 5) continue;
+  if (i == 3) break;
+  console.log(i);
   i += 1 ;
 }
 
@@ -260,7 +280,12 @@ while (i <= 10) {
 
 ```
 
-i = \_10 w i<= 10: ?i==5: ct; ?i==3: br; log(i) i += 1 ;
+i = _10 
+w i<= 10: 
+  ?i==5: ct; 
+  ?i==3: br;
+  log(i) 
+  i += 1;
 
 ```
 
@@ -346,10 +371,6 @@ Or, if you would like it in one line
 ```
 
 f gcd(a,b) => ?b==0: r a; !: r gcd(b, % a b);;
-
-```
-
-```
 
 ```
 
