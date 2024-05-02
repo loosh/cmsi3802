@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className='p-4 w-screen flex justify-between items-start border-t border-gray-300/30'>
+    <footer className='p-4 flex justify-between items-start border-t border-gray-300/30'>
       <div className='flex flex-col gap-1'>
         <h2 className='text-md font-semibold text-gray-600'>Resources</h2>
         <ul className='text-gray-500'>
